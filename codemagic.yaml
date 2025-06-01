@@ -225,4 +225,120 @@ workflows:
 #     app_store_connect:
 #       auth: integration
 #       submit_to_testflight: true
-#       submit_to_app_store: false 
+#       submit_to_app_store: false
+
+# iOS Simulator Build - No code signing required
+ios-simulator:
+  name: iOS Simulator Build
+  max_build_duration: 120
+  instance_type: mac_mini_m1
+  environment:
+    flutter: stable
+    xcode: latest
+    cocoapods: default
+  triggering:
+    events:
+      - push
+      - tag
+      - pull_request
+    branch_patterns:
+      - pattern: develop
+        include: true
+        source: true
+      - pattern: main
+        include: true
+        source: true
+      - pattern: feature/*
+        include: true
+        source: true
+  scripts:
+    - name: Get Flutter packages
+      script: |
+        cd Frontend
+        flutter packages pub get
+    - name: Install pods
+      script: |
+        cd Frontend/ios
+        pod install
+    - name: Flutter analyze
+      script: |
+        cd Frontend
+        flutter analyze
+    - name: Flutter unit tests
+      script: |
+        cd Frontend
+        flutter test
+      ignore_failure: true
+    - name: Build for iOS Simulator
+      script: |
+        cd Frontend
+        flutter build ios --simulator --release \
+          --build-name=1.0.0 \
+          --build-number=$(($(date +'%Y%m%d%H%M%S')))
+  artifacts:
+    - Frontend/build/ios/iphonesimulator/*.app
+    - Frontend/flutter_drive.log
+  publishing:
+    email:
+      recipients:
+        - user@example.com # <-- Put your email here
+      notify:
+        success: true
+        failure: true
+
+# iOS Development with Free Apple ID (Limited but works for device testing)
+ios-free-development:
+  name: iOS Free Development Build
+  max_build_duration: 120
+  instance_type: mac_mini_m1
+  environment:
+    ios_signing:
+      distribution_type: development
+      bundle_identifier: com.example.quizApp
+      # Use automatic signing with your free Apple ID
+      code_signing_identity: "iPhone Developer"
+    vars:
+      BUNDLE_ID: "com.example.quizApp" # <-- Put your bundle id here
+      XCODE_WORKSPACE: "Runner.xcworkspace"
+      XCODE_SCHEME: "Runner"
+      # You can try setting this to your Apple ID email
+      TEAM_ID: "" # <-- Leave empty or put your personal team ID
+    flutter: stable
+    xcode: latest
+    cocoapods: default
+  scripts:
+    - name: Get Flutter packages
+      script: |
+        cd Frontend
+        flutter packages pub get
+    - name: Install pods
+      script: |
+        cd Frontend/ios
+        pod install
+    - name: Flutter analyze
+      script: |
+        cd Frontend
+        flutter analyze
+    - name: Flutter unit tests
+      script: |
+        cd Frontend
+        flutter test
+      ignore_failure: true
+    - name: Build ipa for development (Free Apple ID)
+      script: |
+        cd Frontend
+        flutter build ipa --release \
+          --build-name=1.0.0 \
+          --build-number=$(($(date +'%Y%m%d%H%M%S'))) \
+          --export-method=development
+  artifacts:
+    - Frontend/build/ios/ipa/*.ipa
+    - /tmp/xcodebuild_logs/*.log
+    - Frontend/flutter_drive.log
+  publishing:
+    email:
+      recipients:
+        - user@example.com # <-- Put your email here
+      notify:
+        success: true
+        failure: true 

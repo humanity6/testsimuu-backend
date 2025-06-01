@@ -59,12 +59,12 @@ class AppTheme {
       ),
       
       // Card Theme
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         color: AppColors.white,
         elevation: 4,
         shadowColor: AppColors.darkBlueTransparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.all(Radius.circular(24)),
         ),
       ),
       

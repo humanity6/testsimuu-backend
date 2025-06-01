@@ -1,0 +1,1912 @@
+[
+  {
+    "path": "api/v1/auth/register/",
+    "name": "register",
+    "view": "UserRegistrationView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/auth/login/",
+    "name": "login",
+    "view": "UserLoginView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/auth/logout/",
+    "name": "logout",
+    "view": "UserLogoutView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/auth/refresh/",
+    "name": "token_refresh",
+    "view": "TokenRefreshView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/",
+    "name": "user_profile",
+    "view": "UserProfileView",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/preferences/",
+    "name": "user_preferences",
+    "view": "UserPreferenceView",
+    "methods": [
+      "GET",
+      "PUT",
+      "PATCH"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/topics/",
+    "name": "topic-list",
+    "view": "TopicListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/topics/<str:slug>/",
+    "name": "topic-detail",
+    "view": "TopicDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/questions/",
+    "name": "question-list",
+    "view": "QuestionListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/questions/<int:id>/",
+    "name": "question-detail",
+    "view": "QuestionDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/pricing-plans/",
+    "name": "pricing-plan-list",
+    "view": "PricingPlanListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/pricing-plans/<str:slug>/",
+    "name": "pricing-plan-detail",
+    "view": "PricingPlanDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/subscriptions/",
+    "name": "user-subscription-list-create",
+    "view": "UserSubscriptionListCreateView",
+    "methods": [
+      "GET",
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/subscriptions/<int:id>/cancel/",
+    "name": "user-subscription-cancel",
+    "view": "UserSubscriptionCancelView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/bundles/",
+    "name": "bundle-subscription-create",
+    "view": "BundleSubscriptionCreateView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/referral-programs/",
+    "name": "referral-program-list",
+    "view": "ReferralProgramListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/referral-programs/<int:id>/",
+    "name": "referral-program-detail",
+    "view": "ReferralProgramDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/referrals/apply/",
+    "name": "apply-referral-code",
+    "view": "ReferralCodeApplyView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/referrals/",
+    "name": "user-referrals-list",
+    "view": "UserReferralListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/payments/",
+    "name": "user-payment-list",
+    "view": "UserPaymentListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/users/me/payments/<int:id>/",
+    "name": "user-payment-detail",
+    "view": "UserPaymentDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/payments/verify/",
+    "name": "payment-verify",
+    "view": "PaymentVerificationView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/payments/methods/",
+    "name": "payment-methods",
+    "view": "GetAvailablePaymentMethodsView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/webhooks/sumup/",
+    "name": "sumup-webhook",
+    "view": "SumUpWebhookHandlerView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/admin/^users/$",
+    "name": "admin-user-list",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-list",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/metrics/$",
+    "name": "admin-user-metrics",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-metrics",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/(?P<pk>[^/.]+)/$",
+    "name": "admin-user-detail",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-detail",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/(?P<pk>[^/.]+)/reset_password/$",
+    "name": "admin-user-reset-password",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/(?P<pk>[^/.]+)/reset_password\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-reset-password",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/(?P<pk>[^/.]+)/suspend/$",
+    "name": "admin-user-suspend",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/^users/(?P<pk>[^/.]+)/suspend\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-suspend",
+    "view": "UserAdminViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^topics/$",
+    "name": "admin-topic-list",
+    "view": "AdminTopicViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^topics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-topic-list",
+    "view": "AdminTopicViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^topics/(?P<pk>[^/.]+)/$",
+    "name": "admin-topic-detail",
+    "view": "AdminTopicViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^topics/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-topic-detail",
+    "view": "AdminTopicViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/$",
+    "name": "admin-question-list",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-question-list",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/metrics/$",
+    "name": "admin-question-metrics",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-question-metrics",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/(?P<pk>[^/.]+)/$",
+    "name": "admin-question-detail",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-question-detail",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/(?P<pk>[^/.]+)/add_tag/$",
+    "name": "admin-question-add-tag",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/(?P<pk>[^/.]+)/add_tag\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-question-add-tag",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/(?P<pk>[^/.]+)/remove_tag/$",
+    "name": "admin-question-remove-tag",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^questions/(?P<pk>[^/.]+)/remove_tag\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-question-remove-tag",
+    "view": "AdminQuestionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^tags/$",
+    "name": "admin-tag-list",
+    "view": "AdminTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^tags\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-tag-list",
+    "view": "AdminTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^tags/(?P<pk>[^/.]+)/$",
+    "name": "admin-tag-detail",
+    "view": "AdminTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^tags/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-tag-detail",
+    "view": "AdminTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^tags/(?P<pk>[^/.]+)/questions/$",
+    "name": "admin-tag-questions",
+    "view": "AdminTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^tags/(?P<pk>[^/.]+)/questions\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-tag-questions",
+    "view": "AdminTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^question-tags/$",
+    "name": "admin-question-tag-list",
+    "view": "QuestionTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^question-tags\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-question-tag-list",
+    "view": "QuestionTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^question-tags/(?P<pk>[^/.]+)/$",
+    "name": "admin-question-tag-detail",
+    "view": "QuestionTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/questions/^question-tags/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-question-tag-detail",
+    "view": "QuestionTagViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/$",
+    "name": "admin-pricing-plan-list",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-pricing-plan-list",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/by_exam/$",
+    "name": "admin-pricing-plan-by-exam",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/by_exam\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-pricing-plan-by-exam",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)/$",
+    "name": "admin-pricing-plan-detail",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-pricing-plan-detail",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)/activate/$",
+    "name": "admin-pricing-plan-activate",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)/activate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-pricing-plan-activate",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)/deactivate/$",
+    "name": "admin-pricing-plan-deactivate",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)/deactivate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-pricing-plan-deactivate",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)/duplicate/$",
+    "name": "admin-pricing-plan-duplicate",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^pricing-plans/(?P<pk>[^/.]+)/duplicate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-pricing-plan-duplicate",
+    "view": "AdminPricingPlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/$",
+    "name": "admin-subscription-list",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-list",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/expiring_soon/$",
+    "name": "admin-subscription-expiring-soon",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/expiring_soon\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-expiring-soon",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/process_expired/$",
+    "name": "admin-subscription-process-expired",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/process_expired\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-process-expired",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/$",
+    "name": "admin-subscription-detail",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-detail",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/activate/$",
+    "name": "admin-subscription-activate",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/activate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-activate",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/cancel/$",
+    "name": "admin-subscription-cancel",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/cancel\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-cancel",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/extend/$",
+    "name": "admin-subscription-extend",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/extend\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-extend",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/sync_payment_status/$",
+    "name": "admin-subscription-sync-payment-status",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^subscriptions/(?P<pk>[^/.]+)/sync_payment_status\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-subscription-sync-payment-status",
+    "view": "AdminUserSubscriptionViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/$",
+    "name": "admin-payment-list",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-payment-list",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)/$",
+    "name": "admin-payment-detail",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-payment-detail",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)/mark_as_failed/$",
+    "name": "admin-payment-mark-as-failed",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)/mark_as_failed\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-payment-mark-as-failed",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)/mark_as_successful/$",
+    "name": "admin-payment-mark-as-successful",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)/mark_as_successful\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-payment-mark-as-successful",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)/sync_with_sumup/$",
+    "name": "admin-payment-sync-with-sumup",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^payments/(?P<pk>[^/.]+)/sync_with_sumup\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-payment-sync-with-sumup",
+    "view": "AdminPaymentViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^referral-programs/$",
+    "name": "admin-referral-program-list",
+    "view": "AdminReferralProgramViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^referral-programs\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-referral-program-list",
+    "view": "AdminReferralProgramViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^referral-programs/(?P<pk>[^/.]+)/$",
+    "name": "admin-referral-program-detail",
+    "view": "AdminReferralProgramViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^referral-programs/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-referral-program-detail",
+    "view": "AdminReferralProgramViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^referral-programs/(?P<pk>[^/.]+)/toggle_active/$",
+    "name": "admin-referral-program-toggle-active",
+    "view": "AdminReferralProgramViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^referral-programs/(?P<pk>[^/.]+)/toggle_active\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-referral-program-toggle-active",
+    "view": "AdminReferralProgramViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^user-referrals/$",
+    "name": "admin-user-referral-list",
+    "view": "AdminUserReferralViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^user-referrals\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-referral-list",
+    "view": "AdminUserReferralViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^user-referrals/(?P<pk>[^/.]+)/$",
+    "name": "admin-user-referral-detail",
+    "view": "AdminUserReferralViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^user-referrals/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-referral-detail",
+    "view": "AdminUserReferralViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^user-referrals/(?P<pk>[^/.]+)/mark_rewards_granted/$",
+    "name": "admin-user-referral-mark-rewards-granted",
+    "view": "AdminUserReferralViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/subscriptions/^user-referrals/(?P<pk>[^/.]+)/mark_rewards_granted\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-user-referral-mark-rewards-granted",
+    "view": "AdminUserReferralViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/exams/^exams/$",
+    "name": "admin-exam-list",
+    "view": "AdminExamViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/exams/^exams\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-exam-list",
+    "view": "AdminExamViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/exams/^exams/metrics/$",
+    "name": "admin-exam-metrics",
+    "view": "AdminExamViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/exams/^exams/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-exam-metrics",
+    "view": "AdminExamViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/exams/^exams/(?P<pk>[^/.]+)/$",
+    "name": "admin-exam-detail",
+    "view": "AdminExamViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/exams/^exams/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-exam-detail",
+    "view": "AdminExamViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/users/me/notifications/",
+    "name": "notification-list",
+    "view": "NotificationListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/faq-items/",
+    "name": "faq-item-list",
+    "view": "FAQItemListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/faq-items/<int:id>/",
+    "name": "faq-item-detail",
+    "view": "FAQItemDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/support/tickets/",
+    "name": "support-ticket-list",
+    "view": "SupportTicketListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/support/tickets/create/",
+    "name": "support-ticket-create",
+    "view": "SupportTicketCreateView",
+    "methods": [
+      "POST"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/support/tickets/<int:id>/",
+    "name": "support-ticket-detail",
+    "view": "SupportTicketDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/admin/support/^faq-items/$",
+    "name": "faqitem-list",
+    "view": "AdminFAQItemViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^faq-items\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "faqitem-list",
+    "view": "AdminFAQItemViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^faq-items/(?P<id>[^/.]+)/$",
+    "name": "faqitem-detail",
+    "view": "AdminFAQItemViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^faq-items/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "faqitem-detail",
+    "view": "AdminFAQItemViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/$",
+    "name": "supportticket-list",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "supportticket-list",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)/$",
+    "name": "supportticket-detail",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "supportticket-detail",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)/assign/$",
+    "name": "supportticket-assign",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)/assign\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "supportticket-assign",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)/change_status/$",
+    "name": "supportticket-change-status",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)/change_status\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "supportticket-change-status",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)/reply/$",
+    "name": "supportticket-reply",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/support/^tickets/(?P<id>[^/.]+)/reply\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "supportticket-reply",
+    "view": "AdminSupportTicketViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/$",
+    "name": "admin-content-alert-list",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-content-alert-list",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/bulk_update_status/$",
+    "name": "admin-content-alert-bulk-update-status",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/bulk_update_status\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-content-alert-bulk-update-status",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/metrics/$",
+    "name": "admin-content-alert-metrics",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-content-alert-metrics",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/(?P<pk>[^/.]+)/$",
+    "name": "admin-content-alert-detail",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-content-alert-detail",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/(?P<pk>[^/.]+)/update_status/$",
+    "name": "admin-content-alert-update-status",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-alerts/(?P<pk>[^/.]+)/update_status\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-content-alert-update-status",
+    "view": "AdminAIContentAlertViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/$",
+    "name": "admin-scan-config-list",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-config-list",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/metrics/$",
+    "name": "admin-scan-config-metrics",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-config-metrics",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/(?P<pk>[^/.]+)/$",
+    "name": "admin-scan-config-detail",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-config-detail",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/(?P<pk>[^/.]+)/run_scan/$",
+    "name": "admin-scan-config-run-scan",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/(?P<pk>[^/.]+)/run_scan\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-config-run-scan",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/(?P<pk>[^/.]+)/toggle_active/$",
+    "name": "admin-scan-config-toggle-active",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-configs/(?P<pk>[^/.]+)/toggle_active\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-config-toggle-active",
+    "view": "AdminContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-logs/$",
+    "name": "admin-scan-log-list",
+    "view": "AdminContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-logs\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-log-list",
+    "view": "AdminContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-logs/metrics/$",
+    "name": "admin-scan-log-metrics",
+    "view": "AdminContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-logs/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-log-metrics",
+    "view": "AdminContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-logs/(?P<pk>[^/.]+)/$",
+    "name": "admin-scan-log-detail",
+    "view": "AdminContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^content-scan-logs/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-scan-log-detail",
+    "view": "AdminContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates/$",
+    "name": "admin-feedback-template-list",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-feedback-template-list",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates/metrics/$",
+    "name": "admin-feedback-template-metrics",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-feedback-template-metrics",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates/(?P<pk>[^/.]+)/$",
+    "name": "admin-feedback-template-detail",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-feedback-template-detail",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates/(?P<pk>[^/.]+)/toggle_active/$",
+    "name": "admin-feedback-template-toggle-active",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^feedback-templates/(?P<pk>[^/.]+)/toggle_active\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-feedback-template-toggle-active",
+    "view": "AdminAIFeedbackTemplateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^evaluation-logs/$",
+    "name": "admin-evaluation-log-list",
+    "view": "AdminAIEvaluationLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^evaluation-logs\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-evaluation-log-list",
+    "view": "AdminAIEvaluationLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^evaluation-logs/metrics/$",
+    "name": "admin-evaluation-log-metrics",
+    "view": "AdminAIEvaluationLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^evaluation-logs/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-evaluation-log-metrics",
+    "view": "AdminAIEvaluationLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^evaluation-logs/(?P<pk>[^/.]+)/$",
+    "name": "admin-evaluation-log-detail",
+    "view": "AdminAIEvaluationLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^evaluation-logs/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-evaluation-log-detail",
+    "view": "AdminAIEvaluationLogViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/$",
+    "name": "admin-chatbot-conversation-list",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-conversation-list",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/metrics/$",
+    "name": "admin-chatbot-conversation-metrics",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-conversation-metrics",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/(?P<pk>[^/.]+)/$",
+    "name": "admin-chatbot-conversation-detail",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-conversation-detail",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/(?P<pk>[^/.]+)/deactivate/$",
+    "name": "admin-chatbot-conversation-deactivate",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/(?P<pk>[^/.]+)/deactivate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-conversation-deactivate",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/(?P<pk>[^/.]+)/reactivate/$",
+    "name": "admin-chatbot-conversation-reactivate",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/conversations/(?P<pk>[^/.]+)/reactivate\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-conversation-reactivate",
+    "view": "AdminChatbotConversationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/messages/$",
+    "name": "admin-chatbot-message-list",
+    "view": "AdminChatbotMessageViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/messages\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-message-list",
+    "view": "AdminChatbotMessageViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/messages/metrics/$",
+    "name": "admin-chatbot-message-metrics",
+    "view": "AdminChatbotMessageViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/messages/metrics\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-message-metrics",
+    "view": "AdminChatbotMessageViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/messages/(?P<pk>[^/.]+)/$",
+    "name": "admin-chatbot-message-detail",
+    "view": "AdminChatbotMessageViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/ai/^chatbot/messages/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-chatbot-message-detail",
+    "view": "AdminChatbotMessageViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/ai/^content-alerts/$",
+    "name": "aicontentalert-list",
+    "view": "AIContentAlertViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-alerts\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "aicontentalert-list",
+    "view": "AIContentAlertViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-alerts/(?P<id>[^/.]+)/$",
+    "name": "aicontentalert-detail",
+    "view": "AIContentAlertViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-alerts/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "aicontentalert-detail",
+    "view": "AIContentAlertViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-configs/$",
+    "name": "contentupdatescanconfig-list",
+    "view": "ContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-configs\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "contentupdatescanconfig-list",
+    "view": "ContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-configs/(?P<pk>[^/.]+)/$",
+    "name": "contentupdatescanconfig-detail",
+    "view": "ContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-configs/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "contentupdatescanconfig-detail",
+    "view": "ContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-configs/(?P<pk>[^/.]+)/run_scan/$",
+    "name": "contentupdatescanconfig-run-scan",
+    "view": "ContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-configs/(?P<pk>[^/.]+)/run_scan\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "contentupdatescanconfig-run-scan",
+    "view": "ContentUpdateScanConfigViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-logs/$",
+    "name": "content-scan-logs-list",
+    "view": "ContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-logs\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "content-scan-logs-list",
+    "view": "ContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-logs/(?P<pk>[^/.]+)/$",
+    "name": "content-scan-logs-detail",
+    "view": "ContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^content-scan-logs/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "content-scan-logs-detail",
+    "view": "ContentUpdateScanLogViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/$",
+    "name": "chatbot-conversation-list",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-list",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/active_conversation/$",
+    "name": "chatbot-conversation-active-conversation",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/active_conversation\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-active-conversation",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/conversations/$",
+    "name": "chatbot-conversation-conversations",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/conversations\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-conversations",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/send_message/$",
+    "name": "chatbot-conversation-send-message",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/send_message\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-send-message",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)/$",
+    "name": "chatbot-conversation-detail",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-detail",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)/clear_history/$",
+    "name": "chatbot-conversation-clear-history",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)/clear_history\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-clear-history",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)/conversation_history/$",
+    "name": "chatbot-conversation-conversation-history",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)/conversation_history\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-conversation-history",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)/end_conversation/$",
+    "name": "chatbot-conversation-end-conversation",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/^chatbot/conversations/(?P<pk>[^/.]+)/end_conversation\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "chatbot-conversation-end-conversation",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/ai/chatbot/conversations/<int:conversation_id>/messages/",
+    "name": "chatbot-message-create",
+    "view": "ChatbotViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/exams/",
+    "name": "exam-list",
+    "view": "ExamListView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/exams/<str:slug>/",
+    "name": "exam-detail",
+    "view": "ExamDetailView",
+    "methods": [
+      "GET"
+    ],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^links/$",
+    "name": "affiliate-link-list",
+    "view": "AffiliateLinkViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^links\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-link-list",
+    "view": "AffiliateLinkViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^links/(?P<pk>[^/.]+)/$",
+    "name": "affiliate-link-detail",
+    "view": "AffiliateLinkViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^links/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-link-detail",
+    "view": "AffiliateLinkViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^voucher-codes/$",
+    "name": "voucher-code-list",
+    "view": "VoucherCodeViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^voucher-codes\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "voucher-code-list",
+    "view": "VoucherCodeViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^voucher-codes/(?P<pk>[^/.]+)/$",
+    "name": "voucher-code-detail",
+    "view": "VoucherCodeViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^voucher-codes/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "voucher-code-detail",
+    "view": "VoucherCodeViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^conversions/$",
+    "name": "conversion-list",
+    "view": "ConversionViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^conversions\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "conversion-list",
+    "view": "ConversionViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^conversions/(?P<pk>[^/.]+)/$",
+    "name": "conversion-detail",
+    "view": "ConversionViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^conversions/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "conversion-detail",
+    "view": "ConversionViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^payments/$",
+    "name": "affiliate-payment-list",
+    "view": "AffiliatePaymentViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^payments\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-payment-list",
+    "view": "AffiliatePaymentViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^payments/(?P<pk>[^/.]+)/$",
+    "name": "affiliate-payment-detail",
+    "view": "AffiliatePaymentViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/me/^payments/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-payment-detail",
+    "view": "AffiliatePaymentViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^plans/$",
+    "name": "affiliate-plan-list",
+    "view": "AffiliatePlansViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^plans\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-plan-list",
+    "view": "AffiliatePlansViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^plans/(?P<pk>[^/.]+)/$",
+    "name": "affiliate-plan-detail",
+    "view": "AffiliatePlansViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^plans/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-plan-detail",
+    "view": "AffiliatePlansViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^applications/$",
+    "name": "affiliate-application-list",
+    "view": "AffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^applications\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-application-list",
+    "view": "AffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^applications/(?P<pk>[^/.]+)/$",
+    "name": "affiliate-application-detail",
+    "view": "AffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/affiliates/^applications/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "affiliate-application-detail",
+    "view": "AffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": false
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications/$",
+    "name": "admin-affiliate-application-list",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-application-list",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications/(?P<pk>[^/.]+)/$",
+    "name": "admin-affiliate-application-detail",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-application-detail",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications/(?P<pk>[^/.]+)/approve/$",
+    "name": "admin-affiliate-application-approve",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications/(?P<pk>[^/.]+)/approve\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-application-approve",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications/(?P<pk>[^/.]+)/reject/$",
+    "name": "admin-affiliate-application-reject",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^applications/(?P<pk>[^/.]+)/reject\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-application-reject",
+    "view": "AdminAffiliateApplicationViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^affiliates/$",
+    "name": "admin-affiliate-list",
+    "view": "AdminAffiliateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^affiliates\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-list",
+    "view": "AdminAffiliateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^affiliates/(?P<pk>[^/.]+)/$",
+    "name": "admin-affiliate-detail",
+    "view": "AdminAffiliateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^affiliates/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-detail",
+    "view": "AdminAffiliateViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^plans/$",
+    "name": "admin-affiliate-plan-list",
+    "view": "AdminAffiliatePlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^plans\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-plan-list",
+    "view": "AdminAffiliatePlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^plans/(?P<pk>[^/.]+)/$",
+    "name": "admin-affiliate-plan-detail",
+    "view": "AdminAffiliatePlanViewSet",
+    "methods": [],
+    "is_admin": true
+  },
+  {
+    "path": "api/v1/admin/affiliates/^plans/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+    "name": "admin-affiliate-plan-detail",
+    "view": "AdminAffiliatePlanViewSet",
+    "methods": [],
+    "is_admin": true
+  }
+]

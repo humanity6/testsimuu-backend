@@ -1,0 +1,2074 @@
+================================================================================
+                           TESTSIMU API ENDPOINTS DOCUMENTATION
+================================================================================
+
+BASE URL: Your backend domain
+Authentication: JWT tokens required for most endpoints (except auth endpoints)
+
+================================================================================
+1. AUTHENTICATION & USER MANAGEMENT (/api/v1/)
+================================================================================
+
+POST   /api/v1/auth/register/
+       - User registration
+       - Body: {
+           "email": "user@example.com",
+           "password": "securepassword",
+           "password_confirm": "securepassword",
+           "first_name": "John",
+           "last_name": "Doe",
+           "username": "johndoe"
+         }
+       - Response 201: {
+           "tokens": {
+             "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+             "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+           },
+           "user": {
+             "id": 1,
+             "username": "johndoe",
+             "email": "user@example.com",
+             "first_name": "John",
+             "last_name": "Doe",
+             "profile_picture_url": null,
+             "date_of_birth": null,
+             "time_zone": "UTC",
+             "email_verified": false,
+             "referral_code": "ABC123XYZ",
+             "date_joined": "2024-01-15T10:30:00Z",
+             "is_staff": false
+           }
+         }
+
+POST   /api/v1/auth/login/
+       - User login
+       - Body: {"email": "user@example.com", "password": "securepassword"}
+       - Response 200: {
+           "tokens": {
+             "access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
+             "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
+           },
+           "user": {
+             "id": 1,
+             "username": "johndoe",
+             "email": "user@example.com",
+             "first_name": "John",
+             "last_name": "Doe",
+             "profile_picture_url": null,
+             "date_of_birth": null,
+             "time_zone": "UTC",
+             "email_verified": false,
+             "referral_code": "ABC123XYZ",
+             "date_joined": "2024-01-15T10:30:00Z",
+             "is_staff": false
+           }
+         }
+
+POST   /api/v1/auth/logout/
+       - User logout (blacklist refresh token)
+       - Body: {"refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."}
+       - Response 200: {"success": "Successfully logged out"}
+
+POST   /api/v1/auth/refresh/
+       - Refresh JWT access token
+       - Body: {"refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."}
+       - Response 200: {"access": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."}
+
+GET    /api/v1/users/me/
+       - Get current user profile
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "username": "johndoe",
+           "email": "user@example.com",
+           "first_name": "John",
+           "last_name": "Doe",
+           "profile_picture_url": "https://example.com/profile.jpg",
+           "date_of_birth": "1990-05-15",
+           "time_zone": "America/New_York",
+           "email_verified": true,
+           "referral_code": "ABC123XYZ",
+           "date_joined": "2024-01-15T10:30:00Z",
+           "is_staff": false
+         }
+
+PUT    /api/v1/users/me/  (Also supports PATCH)
+       - Update current user profile
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {
+           "first_name": "John",
+           "last_name": "Smith",
+           "profile_picture_url": "https://example.com/new-profile.jpg",
+           "date_of_birth": "1990-05-15",
+           "time_zone": "America/New_York"
+         }
+       - Response 200: {user_profile_object}
+
+GET    /api/v1/users/me/preferences/
+       - Get user preferences
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "notification_settings": {
+             "system": true,
+             "subscription": true,
+             "learning": true,
+             "support": true,
+             "email": true,
+             "push": false
+           },
+           "ui_preferences": {
+             "theme": "dark",
+             "language": "en",
+             "timezone_display": "local"
+           },
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+POST   /api/v1/users/me/preferences/ (Also supports PUT/PATCH)
+       - Create or Update user preferences
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {
+           "notification_settings": {
+             "system": true,
+             "subscription": false,
+             "learning": true,
+             "support": true,
+             "email": true,
+             "push": false
+           },
+           "ui_preferences": {
+             "theme": "dark",
+             "language": "en"
+           }
+         }
+       - Response 200/201: {preferences_object}
+
+# Admin User Management Endpoints
+GET    /api/v1/admin/users/
+       - List all users (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?page=1&page_size=20&search=john&is_active=true&is_staff=false&email_verified=true
+       - Response 200: {
+           "count": 150,
+           "next": "http://api.example.com/api/v1/admin/users/?page=2",
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "username": "johndoe",
+               "email": "user@example.com",
+               "first_name": "John",
+               "last_name": "Doe",
+               "is_active": true,
+               "is_staff": false,
+               "email_verified": true,
+               "profile_picture_url": null,
+               "date_of_birth": "1990-05-15",
+               "gdpr_consent_date": "2024-01-15T10:30:00Z",
+               "referral_code": "ABC123XYZ",
+               "last_active": "2024-01-20T15:45:00Z",
+               "time_zone": "UTC",
+               "date_joined": "2024-01-15T10:30:00Z"
+             }
+           ]
+         }
+
+POST   /api/v1/admin/users/
+       - Create new user (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {user_creation_data}
+       - Response 201: {user_object}
+
+GET    /api/v1/admin/users/{id}/
+       - Get user details (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {detailed_user_object}
+
+PUT    /api/v1/admin/users/{id}/
+PATCH  /api/v1/admin/users/{id}/
+DELETE /api/v1/admin/users/{id}/
+       - Update/Delete user (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {updated_user_object} or empty
+
+GET    /api/v1/admin/users/metrics/
+       - Get user metrics (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_users": 1500,
+           "active_users": 1200,
+           "new_users_this_month": 150,
+           "verified_users": 1100,
+           "staff_users": 25
+         }
+
+================================================================================
+2. QUESTIONS & TOPICS (/api/v1/)
+================================================================================
+
+GET    /api/v1/topics/
+       - List all active topics
+       - Query params: ?parent_topic_id={id}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 20,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 61,
+               "name": "Biology",
+               "slug": "biology",
+               "description": "Basic biology concepts",
+               "parent_topic_id": null,
+               "display_order": 0
+             }
+           ]
+         }
+
+GET    /api/v1/topics/{slug}/
+       - Get topic details by slug
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "name": "Mathematics",
+           "slug": "mathematics",
+           "description": "Mathematical concepts and problems",
+           "parent_topic": null,
+           "parent_topic_id": null,
+           "display_order": 1,
+           "is_active": true,
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+GET    /api/v1/questions/
+       - List questions (requires active subscription)
+       - Query params: ?exam_id={id}&topic_id={id}&question_type={type}&difficulty={level}&topic_slug={slug}&exam_slug={slug}&search={text}&page=1&page_size=20
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 500,
+           "next": "http://api.example.com/api/v1/questions/?page=2",
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "text": "What is 2 + 2?",
+               "question_type": "MCQ",
+               "difficulty": "EASY",
+               "estimated_time_seconds": 60,
+               "points": 1,
+               "exam_id": 1,
+               "exam_name": "Basic Math",
+               "exam_slug": "basic-math",
+               "topic_id": 1,
+               "topic_name": "Mathematics",
+               "topic_slug": "mathematics",
+               "mcq_choices": [
+                 {
+                   "id": 1,
+                   "choice_text": "3",
+                   "display_order": 1
+                 },
+                 {
+                   "id": 2,
+                   "choice_text": "4",
+                   "display_order": 2
+                 }
+               ]
+             }
+           ]
+         }
+
+GET    /api/v1/questions/{id}/
+       - Get question details (requires active subscription)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "text": "What is 2 + 2?",
+           "question_type": "MCQ",
+           "difficulty": "EASY",
+           "estimated_time_seconds": 60,
+           "points": 1,
+           "exam": {
+             "id": 1,
+             "name": "Basic Math",
+             "slug": "basic-math",
+             "description": "Basic mathematical concepts",
+             "parent_exam_id": null,
+             "display_order": 1
+           },
+           "topic": {
+             "id": 1,
+             "name": "Mathematics",
+             "slug": "mathematics",
+             "description": "Mathematical concepts",
+             "parent_topic_id": null,
+             "display_order": 1
+           },
+           "mcq_choices": [
+             {
+               "id": 1,
+               "choice_text": "3",
+               "display_order": 1
+             },
+             {
+               "id": 2,
+               "choice_text": "4",
+               "display_order": 2
+             }
+           ],
+           "answer_explanation": "2 + 2 equals 4 by basic arithmetic",
+           "tags": ["arithmetic", "basic"],
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+================================================================================
+3. ADMIN QUESTIONS MANAGEMENT (/api/v1/admin/questions/)
+================================================================================
+
+GET    /api/v1/admin/questions/topics/
+POST   /api/v1/admin/questions/topics/
+       - List/Create topics (admin only)
+       - Response 200/201: {
+           "id": 1,
+           "name": "Mathematics",
+           "slug": "mathematics",
+           "description": "Mathematical concepts",
+           "parent_topic": null,
+           "display_order": 1,
+           "is_active": true,
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+GET    /api/v1/admin/questions/topics/{id}/
+PUT    /api/v1/admin/questions/topics/{id}/
+PATCH  /api/v1/admin/questions/topics/{id}/
+DELETE /api/v1/admin/questions/topics/{id}/
+       - Retrieve/Update/Delete topic (admin only)
+
+GET    /api/v1/admin/questions/questions/
+POST   /api/v1/admin/questions/questions/
+       - List/Create questions (admin only)
+       - Query params: ?exam_id={id}&topic_id={id}&question_type={type}&difficulty={level}&tag_id={id}&is_active={bool}
+       - Response 200/201: {
+           "id": 1,
+           "exam": 1,
+           "topic": 1,
+           "text": "What is 2 + 2?",
+           "question_type": "MCQ",
+           "difficulty": "EASY",
+           "estimated_time_seconds": 60,
+           "points": 1,
+           "model_answer_text": "4",
+           "model_calculation_logic": null,
+           "is_active": true,
+           "answer_explanation": "Basic arithmetic",
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z",
+           "created_by": 1,
+           "last_updated_by": 1,
+           "choices": [
+             {
+               "id": 1,
+               "choice_text": "3",
+               "is_correct": false,
+               "display_order": 1,
+               "explanation": "Incorrect answer"
+             },
+             {
+               "id": 2,
+               "choice_text": "4",
+               "is_correct": true,
+               "display_order": 2,
+               "explanation": "Correct answer"
+             }
+           ],
+           "tags": [1, 2]
+         }
+
+GET    /api/v1/admin/questions/questions/{id}/
+PUT    /api/v1/admin/questions/questions/{id}/
+PATCH  /api/v1/admin/questions/questions/{id}/
+DELETE /api/v1/admin/questions/questions/{id}/
+       - Retrieve/Update/Delete question (admin only)
+
+GET    /api/v1/admin/questions/questions/metrics/
+       - Get question metrics (admin only)
+       - Response 200: {
+           "total_questions": 1500,
+           "active_questions": 1200,
+           "questions_by_type": {
+             "MCQ": 800,
+             "OPEN_ENDED": 300,
+             "CALCULATION": 100
+           },
+           "questions_by_difficulty": {
+             "EASY": 500,
+             "MEDIUM": 600,
+             "HARD": 300
+           }
+         }
+
+POST   /api/v1/admin/questions/questions/{id}/add_tag/
+       - Add tag to question (admin only)
+       - Body: {"tag_id": 1}
+       - Response 201: {"message": "Tag with id 1 added to question with id {id}"}
+
+POST   /api/v1/admin/questions/questions/{id}/remove_tag/
+       - Remove tag from question (admin only)
+       - Body: {"tag_id": 1}
+       - Response 200: {"message": "Tag with id 1 removed from question with id {id}"}
+
+GET    /api/v1/admin/questions/tags/
+POST   /api/v1/admin/questions/tags/
+       - List/Create tags (admin only)
+       - Response 200/201: {
+           "id": 1,
+           "name": "arithmetic",
+           "slug": "arithmetic",
+           "description": "Basic arithmetic operations"
+         }
+
+GET    /api/v1/admin/questions/tags/{id}/
+PUT    /api/v1/admin/questions/tags/{id}/
+PATCH  /api/v1/admin/questions/tags/{id}/
+DELETE /api/v1/admin/questions/tags/{id}/
+       - Retrieve/Update/Delete tag (admin only)
+
+GET    /api/v1/admin/questions/tags/{id}/questions/
+       - Get all questions with this tag (admin only)
+       - Response 200: [question_objects]
+
+GET    /api/v1/admin/questions/question-tags/
+POST   /api/v1/admin/questions/question-tags/
+       - List/Create question-tag relationships (admin only)
+
+GET    /api/v1/admin/questions/question-tags/{id}/
+PUT    /api/v1/admin/questions/question-tags/{id}/
+PATCH  /api/v1/admin/questions/question-tags/{id}/
+DELETE /api/v1/admin/questions/question-tags/{id}/
+       - Retrieve/Update/Delete question-tag relationship (admin only)
+
+================================================================================
+4. ADMIN EXAM MANAGEMENT (/api/v1/admin/exams/)
+================================================================================
+
+GET    /api/v1/admin/exams/exams/
+POST   /api/v1/admin/exams/exams/
+       - List/Create exams (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?page=1&page_size=20&is_active=true&parent_exam_id={id}&search={text}
+       - Response 200/201: {
+           "count": 50,
+           "next": "http://api.example.com/api/v1/admin/exams/exams/?page=2",
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "name": "Basic Mathematics",
+               "slug": "basic-mathematics",
+               "description": "Fundamental math concepts",
+               "parent_exam": null,
+               "parent_exam_id": null,
+               "display_order": 1,
+               "is_active": true,
+               "created_at": "2024-01-15T10:30:00Z",
+               "updated_at": "2024-01-15T10:30:00Z",
+               "created_by": 1,
+               "last_updated_by": 1
+             }
+           ]
+         }
+
+GET    /api/v1/admin/exams/exams/{id}/
+PUT    /api/v1/admin/exams/exams/{id}/
+PATCH  /api/v1/admin/exams/exams/{id}/
+DELETE /api/v1/admin/exams/exams/{id}/
+       - Retrieve/Update/Delete exam (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {exam_object} or empty
+
+GET    /api/v1/admin/exams/exams/metrics/
+       - Get exam metrics (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_exams": 50,
+           "active_exams": 45,
+           "inactive_exams": 5,
+           "exams_by_type": {
+             "parent_exams": 10,
+             "sub_exams": 40
+           },
+           "total_questions_across_exams": 5000,
+           "most_popular_exams": [
+             {
+               "exam_id": 1,
+               "exam_name": "Basic Mathematics",
+               "question_count": 500,
+               "subscription_count": 150
+             }
+           ]
+         }
+
+================================================================================
+5. SUBSCRIPTIONS & PAYMENTS (/api/v1/)
+================================================================================
+
+GET    /api/v1/pricing-plans/
+       - List available pricing plans
+       - Query params: ?exam_id={id}&exam_slug={slug}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 26,
+           "next": "http://api.example.com/api/v1/pricing-plans/?page=2",
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "name": "Basic Plan",
+               "slug": "basic-plan",
+               "description": "Access to basic features",
+               "exam_id": 1,
+               "exam_name": "Basic Math",
+               "exam_slug": "basic-math",
+               "price": "29.99",
+               "currency": "USD",
+               "billing_cycle": "MONTHLY",
+               "features_list": ["Access to questions", "Basic analytics"],
+               "trial_days": 7,
+               "display_order": 1,
+               "is_active": true,
+               "created_at": "2024-01-15T10:30:00Z",
+               "updated_at": "2024-01-15T10:30:00Z"
+             }
+           ]
+         }
+
+GET    /api/v1/pricing-plans/{slug}/
+       - Get pricing plan details
+       - Response 200: {
+           "id": 1,
+           "name": "Basic Plan",
+           "slug": "basic-plan",
+           "description": "Access to basic features",
+           "price": "29.99",
+           "currency": "USD",
+           "billing_cycle": "MONTHLY",
+           "features_list": ["Access to questions", "Basic analytics"],
+           "trial_days": 7,
+           "display_order": 1,
+           "is_active": true,
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+GET    /api/v1/users/me/subscriptions/
+POST   /api/v1/users/me/subscriptions/
+       - List user subscriptions / Create new subscription
+       - Headers: Authorization: Bearer {access_token}
+       - GET Response 200: {
+           "count": 0,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "pricing_plan_id": 1,
+               "pricing_plan_name": "Basic Plan",
+               "pricing_plan_price": "29.99",
+               "pricing_plan_currency": "USD",
+               "pricing_plan_billing_cycle": "MONTHLY",
+               "start_date": "2024-01-15T10:30:00Z",
+               "end_date": "2024-02-15T10:30:00Z",
+               "status": "ACTIVE",
+               "auto_renew": true,
+               "cancelled_at": null
+             }
+           ]
+         }
+       - POST Body: {"pricing_plan_id": 1}
+       - POST Response 201: {subscription_object}
+
+POST   /api/v1/users/me/subscriptions/{id}/cancel/
+       - Cancel user subscription
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Subscription cancelled successfully"}
+
+POST   /api/v1/users/me/bundles/
+       - Create a bundle subscription
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"pricing_plan_ids": [1, 2, 3]}
+       - Response 201: {
+           "subscriptions": [subscription_objects],
+           "total_amount": "89.97",
+           "currency": "USD"
+         }
+
+GET    /api/v1/referral-programs/
+       - List available referral programs
+       - Response 200: [
+           {
+             "id": 1,
+             "name": "Friend Referral",
+             "description": "Refer friends and get rewards",
+             "reward_type": "PERCENTAGE_DISCOUNT",
+             "reward_value": "10.00",
+             "referrer_reward_type": "PERCENTAGE_DISCOUNT",
+             "referrer_reward_value": "10.00",
+             "valid_from": "2024-01-01",
+             "valid_until": "2024-12-31",
+             "usage_limit": 1000,
+             "min_purchase_amount": "0.00"
+           }
+         ]
+
+GET    /api/v1/referral-programs/{id}/
+       - Get referral program details
+       - Response 200: {detailed_referral_program_object}
+
+POST   /api/v1/referrals/apply/
+       - Apply referral code
+       - Body: {"referral_code": "FRIEND123"}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Referral code applied successfully"}
+
+GET    /api/v1/users/me/referrals/
+       - Get user's referrals
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [
+           {
+             "id": 1,
+             "referrer_username": "johndoe",
+             "referred_username": "janedoe",
+             "program_name": "Friend Referral",
+             "referral_code_used": "FRIEND123",
+             "status": "COMPLETED",
+             "reward_granted_to_referrer": true,
+             "reward_granted_to_referred": true,
+             "date_referred": "2024-01-15T10:30:00Z",
+             "date_completed": "2024-01-16T10:30:00Z"
+           }
+         ]
+
+GET    /api/v1/users/me/payments/
+       - List user's payment history
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 0,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "user_email": "user@example.com",
+               "amount": "29.99",
+               "currency": "USD",
+               "status": "SUCCESSFUL",
+               "payment_gateway_transaction_id": "txn_123456789",
+               "transaction_time": "2024-01-15T10:30:00Z",
+               "invoice_number": "INV-001",
+               "refund_reference": null
+             }
+           ]
+         }
+
+GET    /api/v1/users/me/payments/{id}/
+       - Get payment details
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "user_email": "user@example.com",
+           "amount": "29.99",
+           "currency": "USD",
+           "status": "SUCCESSFUL",
+           "payment_gateway_transaction_id": "txn_123456789",
+           "transaction_time": "2024-01-15T10:30:00Z",
+           "invoice_number": "INV-001",
+           "refund_reference": null,
+           "subscription_plan": {
+             "id": 1,
+             "name": "Basic Plan",
+             "billing_cycle": "MONTHLY"
+           },
+           "payment_method_details": {
+             "type": "card",
+             "last_four": "1234"
+           },
+           "billing_address": {
+             "street": "123 Main St",
+             "city": "New York",
+             "country": "US"
+           },
+           "metadata": {}
+         }
+
+POST   /api/v1/payments/verify/
+       - Verify a payment
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"transaction_id": "txn_123456789"}
+       - Response 200: {"status": "verified", "payment_status": "SUCCESSFUL"}
+
+GET    /api/v1/payments/methods/
+       - Get available payment methods
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [
+           {
+             "id": "card",
+             "name": "Credit/Debit Card",
+             "supported_currencies": ["USD", "EUR", "GBP"]
+           },
+           {
+             "id": "paypal",
+             "name": "PayPal",
+             "supported_currencies": ["USD", "EUR"]
+           }
+         ]
+
+POST   /api/v1/webhooks/sumup/
+       - SumUp payment webhook handler
+       - Body: {
+           "event_type": "payment.completed",
+           "transaction_id": "txn_123456789",
+           "status": "SUCCESSFUL",
+           "amount": "29.99",
+           "currency": "USD",
+           "payment_date": "2024-01-15T10:30:00Z",
+           "metadata": {}
+         }
+       - Response 200: {"status": "processed"}
+
+# Admin Subscription Endpoints
+GET    /api/v1/admin/subscriptions/pricing-plans/
+POST   /api/v1/admin/subscriptions/pricing-plans/
+       - Admin manage pricing plans
+       - Response 200/201: {
+           "id": 1,
+           "name": "Basic Plan",
+           "slug": "basic-plan",
+           "description": "Access to basic features",
+           "exam": 1,
+           "exam_name": "Basic Math",
+           "price": "29.99",
+           "currency": "USD",
+           "billing_cycle": "MONTHLY",
+           "features_list": ["Access to questions"],
+           "trial_days": 7,
+           "is_active": true,
+           "display_order": 1,
+           "payment_gateway_plan_id": "plan_123",
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+GET    /api/v1/admin/subscriptions/pricing-plans/{id}/
+PUT    /api/v1/admin/subscriptions/pricing-plans/{id}/
+PATCH  /api/v1/admin/subscriptions/pricing-plans/{id}/
+DELETE /api/v1/admin/subscriptions/pricing-plans/{id}/
+       - Admin manage pricing plans
+
+POST   /api/v1/admin/subscriptions/pricing-plans/{id}/activate/
+       - Activate a pricing plan (admin only)
+       - Response 200: {"status": "Plan activated"}
+
+POST   /api/v1/admin/subscriptions/pricing-plans/{id}/deactivate/
+       - Deactivate a pricing plan (admin only)
+       - Response 200: {"status": "Plan deactivated"}
+
+GET    /api/v1/admin/subscriptions/subscriptions/
+POST   /api/v1/admin/subscriptions/subscriptions/
+       - Admin manage user subscriptions
+       - Query params: ?user_id={id}&status={status}&exam_id={id}&expiring_soon={days}&expired={bool}
+       - Response 200/201: {
+           "id": 1,
+           "user": 1,
+           "user_email": "user@example.com",
+           "user_username": "johndoe",
+           "pricing_plan": 1,
+           "pricing_plan_name": "Basic Plan",
+           "exam_name": "Basic Math",
+           "start_date": "2024-01-15T10:30:00Z",
+           "end_date": "2024-02-15T10:30:00Z",
+           "status": "ACTIVE",
+           "auto_renew": true,
+           "cancelled_at": null,
+           "payment_gateway_subscription_id": "sub_123",
+           "renewal_reminder_sent": false,
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+GET    /api/v1/admin/subscriptions/subscriptions/{id}/
+PUT    /api/v1/admin/subscriptions/subscriptions/{id}/
+PATCH  /api/v1/admin/subscriptions/subscriptions/{id}/
+DELETE /api/v1/admin/subscriptions/subscriptions/{id}/
+       - Admin manage user subscriptions
+
+POST   /api/v1/admin/subscriptions/subscriptions/{id}/cancel/
+       - Cancel a subscription (admin only)
+       - Response 200: {"status": "Subscription canceled", "subscription": {subscription_object}}
+
+POST   /api/v1/admin/subscriptions/subscriptions/{id}/activate/
+       - Activate a subscription (admin only)
+       - Response 200: {"status": "Subscription activated", "subscription": {subscription_object}}
+
+POST   /api/v1/admin/subscriptions/subscriptions/{id}/extend/
+       - Extend a subscription (admin only)
+       - Body: {"days": 30}
+       - Response 200: {"status": "Subscription extended by 30 days", "subscription": {subscription_object}}
+
+POST   /api/v1/admin/subscriptions/subscriptions/{id}/sync_payment_status/
+       - Sync subscription with payment gateway (admin only)
+       - Response 200: {"status": "success", "message": "...", "subscription": {subscription_object}}
+
+POST   /api/v1/admin/subscriptions/subscriptions/process_expired/
+       - Process all expired subscriptions (admin only)
+       - Response 200: {"status": "success", "message": "Processed {count} expired subscriptions"}
+
+GET    /api/v1/admin/subscriptions/subscriptions/expiring_soon/
+       - Get subscriptions expiring soon (admin only)
+       - Query params: ?days=7
+       - Response 200: {"count": 5, "subscriptions": [subscription_objects]}
+
+GET    /api/v1/admin/subscriptions/payments/
+GET    /api/v1/admin/subscriptions/payments/{id}/
+       - Admin view payments (read-only)
+       - Query params: ?user_id={id}&subscription_id={id}&status={status}&from={date}&to={date}
+       - Response 200: [payment_objects] or {payment_object}
+
+POST   /api/v1/admin/subscriptions/payments/{id}/mark_as_successful/
+       - Mark a payment as successful (admin only)
+       - Response 200: {"status": "Payment marked as successful", "payment": {payment_object}}
+
+POST   /api/v1/admin/subscriptions/payments/{id}/mark_as_failed/
+       - Mark a payment as failed (admin only)
+       - Response 200: {"status": "Payment marked as failed", "payment": {payment_object}}
+
+POST   /api/v1/admin/subscriptions/payments/{id}/sync_with_sumup/
+       - Sync payment status with SumUp (admin only)
+       - Response 200: {"status": "success", "message": "...", "payment": {payment_object}}
+
+GET    /api/v1/admin/subscriptions/referral-programs/
+POST   /api/v1/admin/subscriptions/referral-programs/
+       - Admin manage referral programs
+       - Response 200/201: {referral_program_objects}
+
+GET    /api/v1/admin/subscriptions/referral-programs/{id}/
+PUT    /api/v1/admin/subscriptions/referral-programs/{id}/
+PATCH  /api/v1/admin/subscriptions/referral-programs/{id}/
+DELETE /api/v1/admin/subscriptions/referral-programs/{id}/
+       - Admin manage referral programs
+
+POST   /api/v1/admin/subscriptions/referral-programs/{id}/toggle_active/
+       - Toggle the active status of a referral program (admin only)
+       - Response 200: {"status": "Program activated/deactivated", "program": {program_object}}
+
+GET    /api/v1/admin/subscriptions/user-referrals/
+GET    /api/v1/admin/subscriptions/user-referrals/{id}/
+       - Admin view user referrals (read-only)
+       - Response 200: [referral_objects] or {referral_object}
+
+POST   /api/v1/admin/subscriptions/user-referrals/{id}/mark_rewards_granted/
+       - Mark rewards as granted for a referral (admin only)
+       - Body: {"grant_to_referrer": true, "grant_to_referred": true}
+       - Response 200: {"status": "Rewards marked as granted", "referral": {referral_object}}
+
+================================================================================
+6. EXAM SESSIONS & ASSESSMENTS (/api/v1/)
+================================================================================
+
+GET    /api/v1/exam-sessions/
+       - List user's exam sessions
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?status={status}&exam_id={id}&page=1&page_size=20
+       - Response 200: {
+           "count": 10,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "user": 1,
+               "exam": 1,
+               "exam_name": "Basic Math",
+               "exam_slug": "basic-math",
+               "title": "Practice Session",
+               "session_type": "PRACTICE",
+               "start_time": "2024-01-15T10:30:00Z",
+               "end_time_expected": "2024-01-15T11:30:00Z",
+               "actual_end_time": null,
+               "status": "IN_PROGRESS",
+               "total_score_achieved": null,
+               "total_possible_score": "100.00",
+               "pass_threshold": "70.00",
+               "passed": null,
+               "time_limit_seconds": 3600,
+               "metadata": {},
+               "created_at": "2024-01-15T10:30:00Z",
+               "questions": [
+                 {
+                   "id": 1,
+                   "text": "What is 2 + 2?",
+                   "question_type": "MCQ",
+                   "difficulty": "EASY",
+                   "estimated_time_seconds": 60,
+                   "points": 1,
+                   "display_order": 1,
+                   "question_weight": "1.00",
+                   "mcq_choices": [choice_objects]
+                 }
+               ]
+             }
+           ]
+         }
+
+POST   /api/v1/exam-sessions/
+       - Create new exam session
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {
+           "exam_id": 1,
+           "session_type": "PRACTICE",
+           "time_limit_seconds": 3600,
+           "title": "Practice Session",
+           "question_ids": [1, 2, 3],
+           "topic_id": 1,
+           "num_questions": 10
+         }
+       - Response 201: {exam_session_object}
+
+GET    /api/v1/exam-sessions/{id}/
+       - Get exam session details
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {detailed_exam_session_object}
+
+POST   /api/v1/exam-sessions/{id}/complete/
+       - Mark exam session as completed
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "message": "Exam session completed",
+           "final_score": "85.00",
+           "passed": true,
+           "completion_time": "2024-01-15T11:15:00Z"
+         }
+
+POST   /api/v1/user-answers/exam-sessions/{session_id}/questions/{question_id}/answer/
+       - Submit answer for specific question in exam session
+       - Body: {
+           "submitted_answer_text": "The answer is 4",
+           "submitted_calculation_input": {"steps": ["2+2", "=4"]},
+           "time_spent_seconds": 45,
+           "submitted_mcq_choice_ids": [2]
+         }
+       - Headers: Authorization: Bearer {access_token}
+       - Response 201: {user_answer_object}
+
+GET    /api/v1/user-answers/
+       - Get user's answers (all or filtered)
+       - Query params: ?exam_session_id={id}&question_id={id}&is_correct={bool}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 5,
+           "next": null,
+           "previous": null,
+           "results": [user_answer_objects]
+         }
+
+GET    /api/v1/user-answers/{id}/
+       - Get specific user answer
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {user_answer_object}
+
+GET    /api/v1/exam-sessions/{id}/results/
+       - Get exam session results
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "exam_session_id": 1,
+           "total_score": "85.00",
+           "percentage_score": "85.00",
+           "passed": true,
+           "total_questions": 10,
+           "correct_answers": 8,
+           "partially_correct_answers": 1,
+           "incorrect_answers": 1,
+           "total_time_spent": 2500,
+           "average_time_per_question": 250
+         }
+
+GET    /api/v1/exam-sessions/{id}/answers/
+       - Get all answers for an exam session
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "exam_session_id": 1,
+           "answers": [detailed_user_answer_objects]
+         }
+
+================================================================================
+7. NOTIFICATIONS (/api/v1/)
+================================================================================
+
+GET    /api/v1/users/me/notifications/
+       - List user's notifications
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 0,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "title": "Welcome to Testsimu!",
+               "message": "Thank you for joining our platform",
+               "notification_type": "SYSTEM",
+               "is_read": false,
+               "created_at": "2024-01-15T10:30:00Z",
+               "related_object_type": null,
+               "related_object_id": null,
+               "metadata": {}
+             }
+           ]
+         }
+
+POST   /api/v1/users/me/notifications/{notification_id}/mark-as-read/
+       - Mark specific notification as read
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Notification marked as read"}
+
+POST   /api/v1/users/me/notifications/mark-all-as-read/
+       - Mark all notifications as read
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "All notifications marked as read"}
+
+================================================================================
+8. USER PERFORMANCE & ANALYTICS (/api/v1/)
+================================================================================
+
+GET    /api/v1/users/me/performance/summary/
+       - Get user's performance summary
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?start_date={date}&end_date={date}
+       - Response 200: {
+           "total_questions": 90,
+           "correct_answers": 63,
+           "partially_correct_answers": 9,
+           "total_points_earned": 630.0,
+           "total_points_possible": 900.0,
+           "total_time_spent_seconds": 5400,
+           "accuracy": 70.0,
+           "average_time_per_question": 60.0,
+           "start_date": "2025-04-25",
+           "end_date": "2025-05-25"
+         }
+
+GET    /api/v1/users/me/performance/by-topic/
+       - Get user's performance by topic
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?start_date={date}&end_date={date}
+       - Response 200: [
+           {
+             "topic": {
+               "id": 61,
+               "name": "Biology",
+               "slug": "biology",
+               "parent_topic_id": null,
+               "parent_topic_name": null
+             },
+             "questions_answered": 90,
+             "correct_answers": 63,
+             "partially_correct_answers": 9,
+             "total_points_earned": 630.0,
+             "total_points_possible": 900.0,
+             "total_time_spent_seconds": 5400,
+             "accuracy": 70.0,
+             "average_time_per_question": 60.0
+           }
+         ]
+
+GET    /api/v1/users/me/performance/by-difficulty/
+       - Get user's performance by difficulty level
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?start_date={date}&end_date={date}
+       - Response 200: [
+           {
+             "difficulty": "EASY",
+             "questions_answered": 30,
+             "correct_answers": 21,
+             "partially_correct_answers": 3,
+             "total_points_earned": 210.0,
+             "total_points_possible": 300.0,
+             "total_time_spent_seconds": 1800,
+             "accuracy": 70.0,
+             "average_time_per_question": 60.0
+           }
+         ]
+
+GET    /api/v1/users/me/performance/trends/
+       - Get user's performance trends over time
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?time_unit={daily|weekly|monthly}&start_date={date}&end_date={date}
+       - Response 200: {
+           "time_unit": "daily",
+           "data_points": [
+             {
+               "date": "2025-05-23",
+               "questions_answered": 30,
+               "correct_answers": 21,
+               "accuracy": 70.0,
+               "points_earned": 210.0
+             },
+             {
+               "date": "2025-05-24",
+               "questions_answered": 30,
+               "correct_answers": 21,
+               "accuracy": 70.0,
+               "points_earned": 210.0
+             }
+           ]
+         }
+
+GET    /api/v1/users/me/progress/by-topic/
+       - Get user's progress by topic
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [
+           {
+             "topic_id": 64,
+             "topic_name": "Anatomy",
+             "topic_slug": "anatomy",
+             "parent_topic_id": null,
+             "parent_topic_name": null,
+             "total_questions_in_topic": 13,
+             "questions_attempted": 0,
+             "questions_mastered": 0,
+             "proficiency_level": "BEGINNER",
+             "completion_percentage": 0.0,
+             "last_activity_date": null
+           }
+         ]
+
+================================================================================
+9. SUPPORT & FAQ (/api/v1/)
+================================================================================
+
+GET    /api/v1/faq-items/
+       - List FAQ items
+       - Query params: ?category={category}&published=true
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 5,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "question_text": "How do I reset my password?",
+               "answer_text": "Click on 'Forgot Password' on the login page",
+               "category": "ACCOUNT",
+               "display_order": 1,
+               "created_at": "2024-01-15T10:30:00Z",
+               "updated_at": "2024-01-15T10:30:00Z",
+               "view_count": 150
+             }
+           ]
+         }
+
+GET    /api/v1/faq-items/{id}/
+       - Get FAQ item details
+       - Response 200: {detailed_faq_item_object}
+
+GET    /api/v1/support/tickets/
+       - List user's support tickets
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 0,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 1,
+               "subject": "Login Issue",
+               "description": "I cannot log into my account",
+               "ticket_type": "TECHNICAL",
+               "status": "OPEN",
+               "priority": "MEDIUM",
+               "created_at": "2024-01-15T10:30:00Z",
+               "updated_at": "2024-01-15T10:30:00Z",
+               "resolved_at": null
+             }
+           ]
+         }
+
+POST   /api/v1/support/tickets/create/
+       - Create new support ticket
+       - Body: {
+           "subject": "Login Issue",
+           "description": "I cannot log into my account",
+           "priority": "MEDIUM",
+           "ticket_type": "TECHNICAL"
+         }
+       - Headers: Authorization: Bearer {access_token}
+       - Response 201: {support_ticket_object}
+
+GET    /api/v1/support/tickets/{id}/
+       - Get support ticket details
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "subject": "Login Issue",
+           "description": "I cannot log into my account",
+           "ticket_type": "TECHNICAL",
+           "status": "OPEN",
+           "priority": "MEDIUM",
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z",
+           "resolved_at": null,
+           "replies": [
+             {
+               "id": 1,
+               "message": "We are looking into this issue",
+               "is_staff_reply": true,
+               "created_at": "2024-01-15T11:00:00Z",
+               "user_name": "support_agent"
+             }
+           ]
+         }
+
+POST   /api/v1/support/tickets/{id}/replies/
+       - Create reply to support ticket
+       - Body: {"message": "Thank you for the quick response"}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 201: {ticket_reply_object}
+
+================================================================================
+10. ADMIN SUPPORT MANAGEMENT (/api/v1/admin/support/)
+================================================================================
+
+GET    /api/v1/admin/support/faq-items/
+POST   /api/v1/admin/support/faq-items/
+       - List/Create FAQ items (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: {faq_item_object}
+
+GET    /api/v1/admin/support/faq-items/{id}/
+PUT    /api/v1/admin/support/faq-items/{id}/
+PATCH  /api/v1/admin/support/faq-items/{id}/
+DELETE /api/v1/admin/support/faq-items/{id}/
+       - Retrieve/Update/Delete FAQ item (admin only)
+       - Headers: Authorization: Bearer {access_token}
+
+GET    /api/v1/admin/support/tickets/
+POST   /api/v1/admin/support/tickets/
+       - List/Create support tickets (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?status={status}&ticket_type={type}&priority={priority}&assigned_to={id}
+       - Response 200/201: {
+           "id": 1,
+           "user": 1,
+           "user_username": "johndoe",
+           "subject": "Login Issue",
+           "description": "I cannot log into my account",
+           "ticket_type": "TECHNICAL",
+           "status": "OPEN",
+           "priority": "MEDIUM",
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z",
+           "resolved_at": null,
+           "assigned_to": 2,
+           "assigned_to_username": "support_agent"
+         }
+
+GET    /api/v1/admin/support/tickets/{id}/
+PUT    /api/v1/admin/support/tickets/{id}/
+PATCH  /api/v1/admin/support/tickets/{id}/
+DELETE /api/v1/admin/support/tickets/{id}/
+       - Retrieve/Update/Delete support ticket (admin only)
+       - Headers: Authorization: Bearer {access_token}
+
+POST   /api/v1/admin/support/tickets/{id}/change_status/
+       - Change the status of a support ticket (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"status": "IN_PROGRESS"}
+       - Response 200: {support_ticket_object}
+
+POST   /api/v1/admin/support/tickets/{id}/assign/
+       - Assign a support ticket to a staff member (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"user_id": 2}
+       - Response 200: {support_ticket_object}
+
+POST   /api/v1/admin/support/tickets/{id}/reply/
+       - Add an admin reply to a support ticket (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"message": "We are looking into this issue"}
+       - Response 201: {ticket_reply_object}
+
+================================================================================
+11. AI INTEGRATION (/api/v1/)
+================================================================================
+
+GET    /api/v1/ai/content-alerts/
+POST   /api/v1/ai/content-alerts/
+       - List/Create content alerts (admin only)
+       - Query params: ?alert_type={type}&status={status}&priority={priority}&related_topic_id={id}&related_question_id={id}&created_after={date}&created_before={date}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: {
+           "id": 1,
+           "alert_type": "CONTENT_UPDATE",
+           "related_topic": 1,
+           "related_topic_name": "Mathematics",
+           "related_question": null,
+           "related_question_text": null,
+           "summary_of_potential_change": "New mathematical concepts discovered",
+           "detailed_explanation": "Recent research suggests updates needed",
+           "source_urls": ["https://example.com/research"],
+           "ai_confidence_score": 0.85,
+           "priority": "MEDIUM",
+           "status": "PENDING",
+           "admin_notes": null,
+           "created_at": "2024-01-15T10:30:00Z",
+           "reviewed_by_admin": null,
+           "reviewed_by_admin_username": null,
+           "reviewed_at": null,
+           "action_taken": null
+         }
+
+GET    /api/v1/ai/content-alerts/{id}/
+PUT    /api/v1/ai/content-alerts/{id}/
+PATCH  /api/v1/ai/content-alerts/{id}/
+DELETE /api/v1/ai/content-alerts/{id}/
+       - Retrieve/Update/Delete content alert (admin only)
+       - Headers: Authorization: Bearer {access_token}
+
+POST   /api/v1/ai/evaluate/answer/
+       - Trigger evaluation of a user answer
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"user_answer_id": 1}
+       - Response 200: {"message": "Evaluation triggered successfully"}
+
+POST   /api/v1/ai/evaluate/batch/
+       - Trigger batch evaluation
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Batch evaluation started", "queued_answers": 25}
+
+GET    /api/v1/ai/content-scan-configs/
+POST   /api/v1/ai/content-scan-configs/
+       - List/Create content scan configurations (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: {content_scan_config_objects}
+
+GET    /api/v1/ai/content-scan-configs/{id}/
+PUT    /api/v1/ai/content-scan-configs/{id}/
+PATCH  /api/v1/ai/content-scan-configs/{id}/
+DELETE /api/v1/ai/content-scan-configs/{id}/
+       - Retrieve/Update/Delete content scan configuration (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {content_scan_config_object} or empty
+
+POST   /api/v1/ai/content-scan-configs/{id}/run_scan/
+       - Trigger a content update scan for this configuration (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Scan triggered successfully"}
+
+GET    /api/v1/ai/content-scan-logs/
+       - List content scan logs (admin only)
+       - Query params: ?status={status}&scan_config={id}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [content_scan_log_objects]
+
+GET    /api/v1/ai/content-scan-logs/{id}/
+       - Get content scan log details (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {content_scan_log_object}
+
+GET    /api/v1/ai/chatbot/conversations/
+POST   /api/v1/ai/chatbot/conversations/
+       - List/Create chatbot conversations
+       - Headers: Authorization: Bearer {access_token}
+       - GET Response 200: {
+           "count": 0,
+           "next": null,
+           "previous": null,
+           "results": []
+         }
+       - POST Response 201: {chatbot_conversation_object}
+
+GET    /api/v1/ai/chatbot/conversations/{id}/
+PUT    /api/v1/ai/chatbot/conversations/{id}/
+PATCH  /api/v1/ai/chatbot/conversations/{id}/
+DELETE /api/v1/ai/chatbot/conversations/{id}/
+       - Retrieve/Update/Delete chatbot conversation
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {chatbot_conversation_object} or empty
+
+POST   /api/v1/ai/chatbot/conversations/send_message/
+       - Send a message to the chatbot
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"message": "Help me with algebra", "conversation_id": 1}
+       - Response 200: {chatbot_response}
+
+GET    /api/v1/ai/chatbot/conversations/conversations/
+       - Get a list of the user's conversations
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [conversation_objects]
+
+GET    /api/v1/ai/chatbot/conversations/{id}/conversation_history/
+       - Get the message history for a specific conversation
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {conversation_with_messages}
+
+POST   /api/v1/ai/chatbot/conversations/{id}/end_conversation/
+       - End a conversation
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Conversation ended"}
+
+GET    /api/v1/ai/chatbot/conversations/active_conversation/
+       - Get the active conversation or create a new one
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {active_conversation_object}
+
+POST   /api/v1/ai/chatbot/conversations/{conversation_id}/messages/
+       - Send a message to a specific conversation
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"message": "Explain quadratic equations"}
+       - Response 200: {
+           "message_id": 123,
+           "content": "AI response text",
+           "processing_time_ms": 250,
+           "conversation_id": 1
+         }
+
+GET    /api/v1/ai/explain/
+       - Get AI explanation for content
+       - Headers: Authorization: Bearer {access_token}
+       - Query params: ?question_id={id}&topic_id={id}&concept={text}
+       - Response 200: {
+           "explanation": "Detailed explanation of the concept...",
+           "processing_time_ms": 350,
+           "confidence_score": 0.92
+         }
+
+================================================================================
+10A. AI INTEGRATION ADMIN ENDPOINTS (/api/v1/admin/ai/)
+================================================================================
+
+# Content Alerts (Admin Management)
+GET    /api/v1/admin/ai/content-alerts/
+POST   /api/v1/admin/ai/content-alerts/
+       - List/Create content alerts (admin only)
+       - Query params: ?alert_type={type}&status={status}&priority={priority}&related_topic_id={id}&related_question_id={id}&created_after={date}&created_before={date}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: {admin_content_alert_object}
+
+GET    /api/v1/admin/ai/content-alerts/{id}/
+PUT    /api/v1/admin/ai/content-alerts/{id}/
+PATCH  /api/v1/admin/ai/content-alerts/{id}/
+DELETE /api/v1/admin/ai/content-alerts/{id}/
+       - Retrieve/Update/Delete content alert (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {admin_content_alert_object} or empty
+
+POST   /api/v1/admin/ai/content-alerts/bulk_update_status/
+       - Bulk update status of content alerts (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Body: {"alert_ids": [1, 2, 3], "status": "REVIEWED"}
+       - Response 200: {"message": "Bulk update completed", "updated_count": 3}
+
+GET    /api/v1/admin/ai/content-alerts/metrics/
+       - Get metrics about content alerts (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_alerts": 150,
+           "pending_alerts": 25,
+           "reviewed_alerts": 100,
+           "dismissed_alerts": 25,
+           "by_priority": {"HIGH": 10, "MEDIUM": 80, "LOW": 60}
+         }
+
+# Content Scan Configurations (Admin Management)
+GET    /api/v1/admin/ai/content-scan-configs/
+POST   /api/v1/admin/ai/content-scan-configs/
+       - List/Create content scan configurations (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: {content_scan_config_objects}
+
+GET    /api/v1/admin/ai/content-scan-configs/{id}/
+PUT    /api/v1/admin/ai/content-scan-configs/{id}/
+PATCH  /api/v1/admin/ai/content-scan-configs/{id}/
+DELETE /api/v1/admin/ai/content-scan-configs/{id}/
+       - Retrieve/Update/Delete content scan configuration (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {content_scan_config_object} or empty
+
+POST   /api/v1/admin/ai/content-scan-configs/{id}/run_scan/
+       - Trigger a content update scan for this configuration (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Scan triggered successfully"}
+
+POST   /api/v1/admin/ai/content-scan-configs/{id}/toggle_active/
+       - Toggle the active status of a scan configuration (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"status": "Configuration activated/deactivated", "is_active": true}
+
+GET    /api/v1/admin/ai/content-scan-configs/metrics/
+       - Get metrics about scan configurations (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_configs": 10,
+           "active_configs": 8,
+           "inactive_configs": 2,
+           "last_scan_times": {"config_1": "2024-01-15T10:30:00Z"}
+         }
+
+# Content Scan Logs (Admin Read-only)
+GET    /api/v1/admin/ai/content-scan-logs/
+       - List content scan logs (admin only)
+       - Query params: ?status={status}&scan_config={id}&date_from={date}&date_to={date}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [content_scan_log_objects]
+
+GET    /api/v1/admin/ai/content-scan-logs/{id}/
+       - Get content scan log details (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {content_scan_log_object}
+
+GET    /api/v1/admin/ai/content-scan-logs/metrics/
+       - Get metrics about scan logs (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_scans": 500,
+           "successful_scans": 450,
+           "failed_scans": 50,
+           "avg_scan_duration": 120
+         }
+
+# AI Feedback Templates (Admin Management)
+GET    /api/v1/admin/ai/feedback-templates/
+POST   /api/v1/admin/ai/feedback-templates/
+       - List/Create AI feedback templates (admin only)
+       - Query params: ?question_type={type}&is_active={bool}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [feedback_template_objects]
+
+GET    /api/v1/admin/ai/feedback-templates/{id}/
+PUT    /api/v1/admin/ai/feedback-templates/{id}/
+PATCH  /api/v1/admin/ai/feedback-templates/{id}/
+DELETE /api/v1/admin/ai/feedback-templates/{id}/
+       - Retrieve/Update/Delete AI feedback template (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {feedback_template_object} or empty
+
+POST   /api/v1/admin/ai/feedback-templates/{id}/toggle_active/
+       - Toggle the active status of a feedback template (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"detail": "Template is now active/inactive", "is_active": true}
+
+GET    /api/v1/admin/ai/feedback-templates/metrics/
+       - Get metrics about AI feedback templates (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_templates": 10,
+           "active_templates": 8,
+           "inactive_templates": 2,
+           "by_question_type": [{"question_type": "MCQ", "count": 5}]
+         }
+
+# AI Evaluation Logs (Admin Read-only)
+GET    /api/v1/admin/ai/evaluation-logs/
+       - List AI evaluation logs (admin only)
+       - Query params: ?success={bool}&date_from={date}&date_to={date}&user_id={id}&question_type={type}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [evaluation_log_objects]
+
+GET    /api/v1/admin/ai/evaluation-logs/{id}/
+       - Get AI evaluation log details (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {evaluation_log_object}
+
+GET    /api/v1/admin/ai/evaluation-logs/metrics/
+       - Get metrics about AI evaluations (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_evaluations": 10000,
+           "successful_evaluations": 9500,
+           "failed_evaluations": 500,
+           "avg_processing_time": 250
+         }
+
+# Chatbot Administration
+GET    /api/v1/admin/ai/chatbot/conversations/
+POST   /api/v1/admin/ai/chatbot/conversations/
+       - List/Create chatbot conversations (admin only)
+       - Query params: ?is_active={bool}&user_id={id}&date_from={date}&date_to={date}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [chatbot_conversation_objects]
+
+GET    /api/v1/admin/ai/chatbot/conversations/{id}/
+PUT    /api/v1/admin/ai/chatbot/conversations/{id}/
+PATCH  /api/v1/admin/ai/chatbot/conversations/{id}/
+DELETE /api/v1/admin/ai/chatbot/conversations/{id}/
+       - Retrieve/Update/Delete chatbot conversation (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {chatbot_conversation_object} or empty
+
+POST   /api/v1/admin/ai/chatbot/conversations/{id}/deactivate/
+       - Deactivate a chatbot conversation (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Conversation deactivated"}
+
+POST   /api/v1/admin/ai/chatbot/conversations/{id}/reactivate/
+       - Reactivate a chatbot conversation (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Conversation reactivated"}
+
+GET    /api/v1/admin/ai/chatbot/conversations/metrics/
+       - Get metrics about chatbot conversations (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_conversations": 1000,
+           "active_conversations": 800,
+           "avg_messages_per_conversation": 5.5,
+           "avg_response_time": 350
+         }
+
+GET    /api/v1/admin/ai/chatbot/messages/
+       - List chatbot messages (admin only - for moderation)
+       - Query params: ?role={role}&conversation={id}&user_id={id}&date_from={date}&date_to={date}&min_processing_time={ms}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [chatbot_message_objects]
+
+GET    /api/v1/admin/ai/chatbot/messages/{id}/
+       - Get chatbot message details (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {chatbot_message_object}
+
+GET    /api/v1/admin/ai/chatbot/messages/metrics/
+       - Get metrics about chatbot messages (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_messages": 5000,
+           "user_messages": 2500,
+           "ai_messages": 2500,
+           "avg_processing_time": 300,
+           "messages_today": 150
+         }
+
+# AI Evaluation Triggers (Admin Operations)
+POST   /api/v1/admin/ai/evaluate/answer/
+       - Trigger evaluation of a specific user answer (admin only)
+       - Body: {"user_answer_id": 1}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Evaluation triggered successfully"}
+
+POST   /api/v1/admin/ai/evaluate/batch/
+       - Trigger batch evaluation of pending answers (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {"message": "Batch evaluation started", "queued_answers": 25}
+
+================================================================================
+12. EXAMS (/api/v1/)
+================================================================================
+
+GET    /api/v1/exams/
+       - List available exams
+       - Query params: ?parent_exam_id={id}&is_active=true
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "count": 13,
+           "next": null,
+           "previous": null,
+           "results": [
+             {
+               "id": 29,
+               "name": "Medical Entrance Exams",
+               "slug": "medical-entrance-exams",
+               "description": "Medical college entrance examinations",
+               "parent_exam_id": null,
+               "display_order": 0
+             }
+           ]
+         }
+
+GET    /api/v1/exams/{slug}/
+       - Get exam details by slug
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "name": "Basic Mathematics",
+           "slug": "basic-mathematics",
+           "description": "Fundamental math concepts",
+           "parent_exam_id": null,
+           "display_order": 1,
+           "is_active": true,
+           "created_at": "2024-01-15T10:30:00Z",
+           "updated_at": "2024-01-15T10:30:00Z"
+         }
+
+================================================================================
+13. AFFILIATES (/api/v1/)
+================================================================================
+
+GET    /api/v1/affiliates/me/
+       - Get current user's affiliate profile info
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "id": 1,
+           "user": 1,
+           "affiliate_code": "AFF123",
+           "commission_rate": "10.00",
+           "total_earnings": "125.50",
+           "pending_earnings": "25.00",
+           "is_active": true,
+           "created_at": "2024-01-15T10:30:00Z"
+         }
+
+GET    /api/v1/affiliates/me/statistics/
+       - Get affiliate statistics for current user
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {affiliate_statistics_object}
+
+GET    /api/v1/affiliates/me/links/
+POST   /api/v1/affiliates/me/links/
+       - Get/Create affiliate links for current user
+       - Body (POST): {"name": "Homepage Link", "link_type": "GENERAL", "target_url": "https://example.com", "utm_campaign": "summer2024"}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [affiliate_link_objects]
+
+GET    /api/v1/affiliates/me/links/{id}/
+PUT    /api/v1/affiliates/me/links/{id}/
+PATCH  /api/v1/affiliates/me/links/{id}/
+DELETE /api/v1/affiliates/me/links/{id}/
+       - Retrieve/Update/Delete affiliate link
+       - Headers: Authorization: Bearer {access_token}
+
+GET    /api/v1/affiliates/me/voucher-codes/
+POST   /api/v1/affiliates/me/voucher-codes/
+       - Get/Create voucher codes for current user
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [voucher_code_objects]
+
+GET    /api/v1/affiliates/me/voucher-codes/{id}/
+PUT    /api/v1/affiliates/me/voucher-codes/{id}/
+PATCH  /api/v1/affiliates/me/voucher-codes/{id}/
+DELETE /api/v1/affiliates/me/voucher-codes/{id}/
+       - Retrieve/Update/Delete voucher code
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {voucher_code_object} or empty
+
+GET    /api/v1/affiliates/me/conversions/
+POST   /api/v1/affiliates/me/conversions/
+       - Get/Create conversions for current user
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [conversion_objects]
+
+GET    /api/v1/affiliates/me/conversions/{id}/
+PUT    /api/v1/affiliates/me/conversions/{id}/
+PATCH  /api/v1/affiliates/me/conversions/{id}/
+DELETE /api/v1/affiliates/me/conversions/{id}/
+       - Retrieve/Update/Delete conversion
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {conversion_object} or empty
+
+GET    /api/v1/affiliates/me/payments/
+POST   /api/v1/affiliates/me/payments/
+       - Get/Create affiliate payments for current user
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [affiliate_payment_objects]
+
+GET    /api/v1/affiliates/me/payments/{id}/
+PUT    /api/v1/affiliates/me/payments/{id}/
+PATCH  /api/v1/affiliates/me/payments/{id}/
+DELETE /api/v1/affiliates/me/payments/{id}/
+       - Retrieve/Update/Delete affiliate payment
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {affiliate_payment_object} or empty
+
+GET    /api/v1/affiliates/track-click/
+POST   /api/v1/affiliates/track-click/
+       - Track a click on an affiliate link
+       - Body: {tracking_id, referrer_url?}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {click_tracking_response}
+
+POST   /api/v1/affiliates/apply-voucher/
+       - Apply a voucher code to a purchase
+       - Body: {code}
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {voucher_application_response}
+
+# New Affiliate Endpoints
+GET    /api/v1/affiliates/plans/
+       - List available affiliate plans
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [
+           {
+             "id": 1,
+             "name": "Standard Affiliate",
+             "description": "Our standard affiliate program",
+             "commission_rate": "10.00",
+             "requirements": ["At least 1000 followers"],
+             "benefits": ["10% commission on all sales"],
+             "terms_and_conditions": "Full terms and conditions...",
+             "is_active": true
+           }
+         ]
+
+GET    /api/v1/affiliates/plans/{id}/
+       - Get affiliate plan details
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {affiliate_plan_object}
+
+GET    /api/v1/affiliates/applications/
+POST   /api/v1/affiliates/applications/
+       - List/Create affiliate applications
+       - Headers: Authorization: Bearer {access_token}
+       - POST Body: {
+           "affiliate_plan_id": 1,
+           "website_url": "https://myblog.com",
+           "social_media_urls": {"instagram": "https://instagram.com/myaccount"},
+           "audience_size": 5000,
+           "application_reason": "I want to promote your products"
+         }
+       - Response 200/201: [affiliate_application_objects]
+
+GET    /api/v1/affiliates/applications/{id}/
+       - Get affiliate application details
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {affiliate_application_object}
+
+GET    /api/v1/affiliates/opportunities/
+       - Get affiliate opportunities
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [
+           {
+             "id": 1,
+             "title": "Special Promotion",
+             "description": "Promote our summer sale",
+             "start_date": "2024-06-01",
+             "end_date": "2024-08-31",
+             "bonus_commission_rate": "5.00",
+             "requirements": ["Active affiliate status"],
+             "is_active": true
+           }
+         ]
+
+GET    /api/v1/affiliates/status/
+       - Get user's affiliate status
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "is_affiliate": true,
+           "affiliate_status": "ACTIVE",
+           "can_apply": true,
+           "pending_applications": 0
+         }
+
+# Admin Affiliate Endpoints
+GET    /api/v1/admin/affiliates/applications/
+       - List affiliate applications (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: [affiliate_application_objects]
+
+GET    /api/v1/admin/affiliates/applications/{id}/
+PUT    /api/v1/admin/affiliates/applications/{id}/
+PATCH  /api/v1/admin/affiliates/applications/{id}/
+DELETE /api/v1/admin/affiliates/applications/{id}/
+       - Retrieve/Update/Delete affiliate application (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {affiliate_application_object} or empty
+
+GET    /api/v1/admin/affiliates/affiliates/
+POST   /api/v1/admin/affiliates/affiliates/
+       - List/Create affiliates (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [affiliate_objects]
+
+GET    /api/v1/admin/affiliates/affiliates/{id}/
+PUT    /api/v1/admin/affiliates/affiliates/{id}/
+PATCH  /api/v1/admin/affiliates/affiliates/{id}/
+DELETE /api/v1/admin/affiliates/affiliates/{id}/
+       - Retrieve/Update/Delete affiliate (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {affiliate_object} or empty
+
+GET    /api/v1/admin/affiliates/plans/
+POST   /api/v1/admin/affiliates/plans/
+       - List/Create affiliate plans (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/201: [affiliate_plan_objects]
+
+GET    /api/v1/admin/affiliates/plans/{id}/
+PUT    /api/v1/admin/affiliates/plans/{id}/
+PATCH  /api/v1/admin/affiliates/plans/{id}/
+DELETE /api/v1/admin/affiliates/plans/{id}/
+       - Retrieve/Update/Delete affiliate plan (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200/204: {affiliate_plan_object} or empty
+
+GET    /api/v1/admin/affiliates/analytics/
+       - Get affiliate analytics (admin only)
+       - Headers: Authorization: Bearer {access_token}
+       - Response 200: {
+           "total_affiliates": 50,
+           "active_affiliates": 35,
+           "total_clicks": 1500,
+           "total_conversions": 120,
+           "conversion_rate": "8.00",
+           "total_commission_paid": "1250.00",
+           "pending_commission": "250.00"
+         }
+
+================================================================================
+COMMON HTTP STATUS CODES
+================================================================================
+
+200 - OK: Request successful
+201 - Created: Resource created successfully
+202 - Accepted: Request accepted for processing
+400 - Bad Request: Invalid request data
+401 - Unauthorized: Authentication required
+403 - Forbidden: Permission denied
+404 - Not Found: Resource not found
+422 - Unprocessable Entity: Validation errors
+500 - Internal Server Error: Server error
+
+================================================================================
+ERROR RESPONSE FORMAT
+================================================================================
+
+All error responses follow this format:
+{
+  "field_name": ["Field-specific error message"]
+}
+
+For non-field errors:
+{
+  "non_field_errors": ["General error message"]
+}
+
+Example validation error (400):
+{
+  "email": ["This field is required."],
+  "password": ["Password must be at least 8 characters long."]
+}
+
+Example authentication error (401):
+{
+  "detail": "Authentication credentials were not provided."
+}
+
+================================================================================
+AUTHENTICATION
+================================================================================
+
+Most endpoints require JWT authentication. Include the access token in headers:
+Authorization: Bearer {your_access_token}
+
+Access tokens expire and need to be refreshed using the refresh token:
+POST /api/v1/auth/refresh/ with {"refresh": "your_refresh_token"}
+
+================================================================================
+PAGINATION
+================================================================================
+
+List endpoints typically support pagination with query parameters:
+?page=1&page_size=20
+
+Most list endpoints use Django REST Framework pagination format:
+{
+  "count": 100,
+  "next": "https://api.example.com/api/v1/resources/?page=2&page_size=20",
+  "previous": null,
+  "results": [...]
+}
+
+Note: All paginated endpoints return this structure, not plain arrays.
+
+================================================================================
+FILTERING & SEARCH
+================================================================================
+
+Many list endpoints support filtering and search:
+- Use query parameters for filtering: ?field_name=value
+- Use ?search={term} for text search where supported
+- Multiple filters can be combined
+
+================================================================================
+SUBSCRIPTION REQUIREMENTS
+================================================================================
+
+Some endpoints require an active subscription:
+- All question detail endpoints (/api/v1/questions/ returns 403 without subscription)
+- Question listing endpoints
+- Exam session creation (/api/v1/exam-sessions/ returns 403 without subscription)
+- Advanced analytics endpoints
+
+Check subscription status before accessing these endpoints.
+
+Note: All endpoints now require authentication (return 401 without valid JWT token).
+
+================================================================================
+FIELD TYPES & FORMATS
+================================================================================
+
+Common field types and their formats:
+- Dates: "2024-01-15" (YYYY-MM-DD)
+- DateTimes: "2024-01-15T10:30:00Z" (ISO 8601)
+- Decimals: "29.99" (string representation)
+- JSON Fields: {} (object) or [] (array)
+- UUIDs: "123e4567-e89b-12d3-a456-426614174000"
+- Slugs: "basic-mathematics" (lowercase, hyphenated)
+
+Choice field values:
+- Question Types: MCQ, OPEN_ENDED, CALCULATION
+- Difficulty Levels: EASY, MEDIUM, HARD
+- Subscription Status: ACTIVE, EXPIRED, CANCELLED, PENDING_PAYMENT
+- Payment Status: PENDING, SUCCESSFUL, FAILED, REFUNDED
+- Ticket Status: OPEN, IN_PROGRESS, RESOLVED, CLOSED
+- Priority Levels: LOW, MEDIUM, HIGH, URGENT
+
+================================================================================
+RATE LIMITING
+================================================================================
+
+API endpoints may be rate limited:
+- Authentication endpoints: 5 requests per minute
+- General API endpoints: 100 requests per minute
+- Admin endpoints: 200 requests per minute
+- File upload endpoints: 10 requests per minute
+
+Rate limit headers are included in responses:
+- X-RateLimit-Limit: Maximum requests allowed
+- X-RateLimit-Remaining: Requests remaining in current window
+- X-RateLimit-Reset: Time when rate limit resets
+
+================================================================================
+WEBHOOKS
+================================================================================
+
+Webhook endpoints for external integrations:
+- SumUp payment webhooks: POST /api/v1/webhooks/sumup/
+- Affiliate tracking: POST /api/v1/track-click/
+
+Webhook payloads include verification signatures for security.
+
+================================================================================
+NOTES
+================================================================================
+
+1. All admin endpoints require staff/admin privileges
+2. Subscription-protected endpoints require active exam subscriptions
+3. Some endpoints support both ID and slug-based lookups
+4. Date parameters should be in YYYY-MM-DD format
+5. All timestamps are in ISO 8601 format (UTC)
+6. File uploads may require multipart/form-data content type
+7. Some endpoints support bulk operations via query parameters
+8. Rate limiting may apply to certain endpoints
+9. WebSocket connections may be available for real-time features
+10. API versioning is handled via URL path (/api/v1/)
+11. All monetary values are returned as strings to preserve precision
+12. JSON fields can contain complex nested objects and arrays
+13. Soft deletes are used for most resources (is_active field)
+14. Audit trails are maintained for admin actions
+15. All user-generated content is sanitized and validated
+
+================================================================================

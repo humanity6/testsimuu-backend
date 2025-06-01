@@ -1,0 +1,108 @@
+## 🧠 **Testimus - Intelligent Exam Preparation Platform**
+
+Testimus is a comprehensive exam preparation platform that combines traditional learning methods with cutting-edge AI technology to provide personalized learning experiences for students preparing for various examinations.
+
+### 🏗️ **Tech Stack**
+- **Backend:** Django REST Framework with Python 3.12+
+- **Frontend:** Flutter (Mobile + Web) for cross-platform compatibility
+- **Database:** **SQLite** for lightweight, file-based data management
+- **AI Integration:** OpenAI GPT models for intelligent tutoring and question generation
+- **Payment Processing:** SumUp integration for subscription management
+- **Authentication:** JWT-based secure authentication system
+- **API Documentation:** Swagger/OpenAPI integration
+
+### 📱 **Platform Features**
+
+---
+
+### **1. Apps & Website Development**
+
+- **Platforms:** Android, iOS, and Web
+- **Development Stack:**
+    - **Mobile Apps:** Built using **Flutter** for cross-platform compatibility
+    - **Backend:** Developed in **Python** using the **Django** framework
+    - **Database:** **PostgreSQL** for structured, scalable data management
+    - **DevOps:** CI/CD pipeline setup, deployment infrastructure, performance monitoring, and maintenance
+- **Frontend & UI/UX:** Responsive, user-friendly design for both mobile and web platforms
+- Intuitive navigation for a hierarchical exam system (e.g., main exams, sub-categories, mini-exams).
+
+---
+
+### **2. Question Types**
+
+- **Multiple Choice Questions (MCQs):**
+    - Single or multiple correct answers
+    - Simple interface for answering and scoring
+- **Open-Ended Questions:**
+    - Users type in responses
+    - AI evaluates answers based on:
+        - Provided model answers
+        - Relevance and completeness
+- **Calculation-Based Questions:**
+    - Users calculate scenarios (e.g., cost accounting)
+    - Input formatted in tables or structured fields
+    - AI checks calculations against predefined correct logic
+
+---
+
+### **3. AI Integration**
+
+- **Automatic Answer Evaluation:**
+    - AI automatically reviews and scores open-ended and calculation-based answers
+- **Daily Web Search for Content Updates:**
+    - Once per day, AI scans the internet for updates related to exam topics (e.g., changes in laws)
+    - Admins are notified and shown the related questions that may require updates
+    - Implemented using the **OpenAI API** and its search functionality
+
+---
+
+### **4. Learning Experience**
+
+- **Question Filtering:** Users can filter questions by exam, category, topic, or difficulty.
+- **Reports and Analytics:**
+    - Performance is visualized through reports showing:
+        - Accuracy over time
+        - Strengths and weaknesses by topic
+        - Progress trends
+- **Exam Mode:**
+    - Users can simulate real exam conditions with:
+        - Timed sessions
+        - Automatic scoring
+        - Pass/fail outcome based on points
+- **Flexible Exam Taking:** Users can engage with comprehensive main exams or focus on specific mini-exams or categories within the hierarchical structure.
+- **Exam Library:** A browsable library of all available exams, showcasing the hierarchical structure and allowing users to easily find and select exams or sub-categories.
+- **Estimated Completion Time:**
+    - Display of estimated time required to complete tasks
+
+---
+
+### **5. Admin Panel**
+
+- **Content Management:** Create, edit, and manage all question types, topics, and the exam hierarchy (main exams, categories, mini-exams).
+- **User Management:**
+    - View user performance statistics
+- **AI Alerts:**
+    - Receive AI-generated alerts for outdated or update-worthy content
+- **Subscription & Payment Management:** Manage user subscriptions, flexible pricing plans (which can be linked to specific exams, exam categories, or bundles), and referral models.
+- **Subscription Model:**
+    - Tiered pricing plans (e.g., monthly, yearly), with options for subscriptions to individual exams, categories, or bundles.
+    - The number of plans is flexible and can be managed dynamically from the admin panel
+    - Integrated with **SumUp API** for payment processing
+
+---
+
+### **6. Monetization**
+
+- **Referral Model:**
+    - A built-in referral system allowing users to earn benefits or discounts through referrals
+    - Referral logic and rewards can be managed from the admin panel
+
+---
+
+### **7. Additional Features**
+
+- **GDPR Compliance:**
+    - Full compliance with the General Data Protection Regulation of the European Union
+- **Help & Support:**
+    - Integrated FAQ/Help section
+    - AI-powered Chatbot for real-time support (provided at no extra cost)

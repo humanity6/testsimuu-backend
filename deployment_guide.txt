@@ -1,0 +1,230 @@
+# Testimus Project - Hetzner Cloud Deployment Guide
+
+## Server Details
+- IP Address: 188.245.35.46
+- Django Project with SQLite3 database
+- REST API backend with Flutter frontend
+
+## Step 1: Connect to Your Server
+Connect to your server via SSH:
+```bash
+ssh root@188.245.35.46
+```
+
+## Step 2: Update System and Install Dependencies
+```bash
+# Update system
+apt update
+apt upgrade -y
+
+# Install Python, pip, git, and other essentials
+apt install -y python3 python3-pip python3-venv git nginx supervisor
+
+# Install Node.js for potential frontend build (if needed)
+curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+apt install -y nodejs
+```
+
+## Step 3: Create Application User
+```bash
+# Create a dedicated user for the application
+adduser --system --group --home /var/www/testimus testimus
+```
+
+## Step 4: Upload and Setup Project
+```bash
+# Switch to the application directory
+cd /var/www/testimus
+
+# Clone or upload your project (replace with your method)
+# Option 1: If using git
+git clone https://github.com/yourusername/testimus.git .
+
+# Option 2: If uploading manually, upload your project files here
+
+# Set proper ownership
+chown -R testimus:testimus /var/www/testimus
+```
+
+## Step 5: Setup Python Virtual Environment
+```bash
+# Switch to testimus user
+su - testimus
+cd /var/www/testimus
+
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Install additional production dependencies
+pip install gunicorn
+```
+
+## Step 6: Configure Django Settings for Production
+The settings need to be updated for production. Key changes needed:
+- Update ALLOWED_HOSTS to include your server IP
+- Set DEBUG to False for production
+- Configure static files properly
+- Update FRONTEND_URL
+
+## Step 7: Setup Database and Run Migrations
+```bash
+# Make sure you're in the project directory with venv activated
+cd /var/www/testimus
+source venv/bin/activate
+
+# Copy your existing database or run migrations
+python manage.py migrate
+
+# Create superuser (if needed)
+python manage.py createsuperuser
+
+# Collect static files
+python manage.py collectstatic --noinput
+```
+
+## Step 8: Test Django Application
+```bash
+# Test if the application runs
+python manage.py runserver 0.0.0.0:8000
+```
+
+## Step 9: Setup Gunicorn
+Create gunicorn configuration:
+```bash
+# Create gunicorn config file
+cat > /var/www/testimus/gunicorn.conf.py << EOF
+bind = "127.0.0.1:8000"
+workers = 3
+user = "testimus"
+group = "testimus"
+chdir = "/var/www/testimus"
+max_requests = 1000
+max_requests_jitter = 100
+timeout = 30
+keepalive = 2
+EOF
+```
+
+## Step 10: Setup Supervisor for Process Management
+Create supervisor configuration:
+```bash
+# Create supervisor config (as root)
+cat > /etc/supervisor/conf.d/testimus.conf << EOF
+[program:testimus]
+command=/var/www/testimus/venv/bin/gunicorn exam_prep_platform.wsgi:application -c /var/www/testimus/gunicorn.conf.py
+directory=/var/www/testimus
+user=testimus
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/var/log/testimus.log
+EOF
+
+# Reload supervisor
+supervisorctl reread
+supervisorctl update
+supervisorctl start testimus
+```
+
+## Step 11: Setup Nginx
+```bash
+# Create nginx configuration
+cat > /etc/nginx/sites-available/testimus << EOF
+server {
+    listen 80;
+    server_name 188.245.35.46;
+    
+    location /static/ {
+        alias /var/www/testimus/staticfiles/;
+    }
+    
+    location /media/ {
+        alias /var/www/testimus/media/;
+    }
+    
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+    }
+}
+EOF
+
+# Enable the site
+ln -s /etc/nginx/sites-available/testimus /etc/nginx/sites-enabled/
+rm /etc/nginx/sites-enabled/default
+
+# Test nginx configuration
+nginx -t
+
+# Restart nginx
+systemctl restart nginx
+```
+
+## Step 12: Setup Firewall (Optional but Recommended)
+```bash
+# Install and configure UFW
+apt install -y ufw
+
+# Allow SSH, HTTP, and HTTPS
+ufw allow ssh
+ufw allow 80
+ufw allow 443
+
+# Enable firewall
+ufw --force enable
+```
+
+## Step 13: Final Testing
+Your application should now be accessible at:
+- Main site: http://188.245.35.46
+- Admin panel: http://188.245.35.46/admin/
+- API documentation: http://188.245.35.46/api/schema/swagger-ui/
+
+## Quick Commands for Management
+```bash
+# Check application status
+supervisorctl status testimus
+
+# Restart application
+supervisorctl restart testimus
+
+# View logs
+tail -f /var/log/testimus.log
+
+# Check nginx status
+systemctl status nginx
+
+# Restart nginx
+systemctl restart nginx
+```
+
+## Troubleshooting
+1. If the site doesn't load, check:
+   - Supervisor status: `supervisorctl status`
+   - Nginx status: `systemctl status nginx`
+   - Application logs: `tail -f /var/log/testimus.log`
+   - Nginx logs: `tail -f /var/log/nginx/error.log`
+
+2. If you get 502 errors:
+   - Check if gunicorn is running: `supervisorctl status testimus`
+   - Check if the socket/port is correct in nginx config
+
+3. Static files not loading:
+   - Run `python manage.py collectstatic` in the project directory
+   - Check nginx static file configuration
+
+## Notes
+- This is a basic production setup
+- For better security, consider setting up SSL/HTTPS with Let's Encrypt
+- Consider setting up a proper domain name instead of using IP
+- Monitor disk space as SQLite database will grow
+- Consider database backups for production use 

@@ -1,0 +1,231 @@
+====================================================================
+TESTIMUS LOCAL DEVELOPMENT SETUP GUIDE
+====================================================================
+
+🚀 QUICK START
+--------------
+Your app is now configured for local development and testing!
+All API endpoints now use localhost:8000 instead of production server (188.245.35.46)
+
+1. Start the local server:
+   > python start_local_development.py
+   OR
+   > python run_local_server.py
+
+2. Test the API endpoints:
+   > python test_local_api_endpoints.py
+   (Run this in a separate terminal while server is running)
+
+3. Access your local application:
+   • Main Server: http://localhost:8000/
+   • Admin Panel: http://localhost:8000/admin/
+   • API Docs: http://localhost:8000/api/docs/
+   • API Redoc: http://localhost:8000/api/redoc/
+
+====================================================================
+📋 LOCAL CONFIGURATION SUMMARY
+====================================================================
+
+✅ DEBUG = True (Development mode)
+✅ Database: SQLite (Local file: exam_prep_db.sqlite3)
+✅ Email Backend: Console (Emails print to terminal)
+✅ CORS: Allow all origins (Development only)
+✅ Static Files: Development mode
+✅ Authentication: Case-insensitive email enabled
+✅ Frontend URL: http://localhost:8000
+✅ Flutter App: Configured for localhost:8000
+✅ Testing Mode: Enabled for external APIs
+✅ Backend: Django REST Framework (Python 3.12+)
+✅ Frontend: Flutter (Cross-platform mobile & web)
+✅ Database: SQLite (development & production)
+✅ Authentication: JWT with SimpleJWT
+✅ AI Integration: OpenAI GPT models
+
+====================================================================
+🔄 CONFIGURATION CHANGES MADE
+====================================================================
+
+FLUTTER APP UPDATES:
+✅ Frontend/lib/utils/api_config.dart - Updated to use localhost:8000
+✅ Frontend/test/api_endpoint_test.dart - Updated test URLs
+✅ Frontend/test/service_dummy_data_test.dart - Updated test expectations
+✅ Android network security config already allows localhost
+
+DJANGO BACKEND:
+✅ exam_prep_platform/settings.py - Already configured for local development
+✅ Local server scripts updated and ready
+✅ All API endpoints will use localhost:8000
+
+PRODUCTION VS LOCAL:
+✅ Production server (188.245.35.46) - NOT USED for local development
+✅ Local server (localhost:8000) - USED for local development
+✅ Easy switching between environments via configuration files
+
+====================================================================
+🧪 TESTING FEATURES
+====================================================================
+
+1. CASE-INSENSITIVE EMAIL AUTHENTICATION:
+   • Users can log in with any case variation of their email
+   • Example: user@example.com, USER@EXAMPLE.COM, User@Example.COM
+   • All work for the same account
+
+2. API ENDPOINTS (ALL ON LOCALHOST):
+   • Registration: POST http://localhost:8000/api/v1/auth/register/
+   • Login: POST http://localhost:8000/api/v1/auth/login/
+   • Logout: POST http://localhost:8000/api/v1/auth/logout/
+   • Profile: GET/PUT http://localhost:8000/api/v1/users/me/
+   • Token Refresh: POST http://localhost:8000/api/v1/auth/refresh/
+   • Admin APIs: http://localhost:8000/api/v1/admin/...
+
+3. ADMIN PANEL:
+   • Create superuser: python manage.py createsuperuser
+   • Access: http://localhost:8000/admin/
+
+4. COMPREHENSIVE TESTING:
+   • Run: python test_local_api_endpoints.py
+   • Tests all major API endpoints
+   • Verifies local configuration is working
+
+====================================================================
+🛠️ SERVER STARTUP COMMANDS
+====================================================================
+
+RECOMMENDED (Automated):
+> python start_local_development.py
+   • Comprehensive environment checks
+   • Automatic database migrations
+   • Configuration verification
+   • Server startup with monitoring
+
+SIMPLE (Existing):
+> python run_local_server.py
+   • Quick server startup
+   • Basic environment setup
+   • Automatic migrations
+
+MANUAL (Advanced):
+1. Start development server:
+   > python manage.py runserver localhost:8000
+
+2. Run migrations:
+   > python manage.py migrate
+
+3. Create admin user:
+   > python manage.py createsuperuser
+
+4. Collect static files (if needed):
+   > python manage.py collectstatic
+
+5. Run tests:
+   > python manage.py test
+
+====================================================================
+🔧 ENVIRONMENT VARIABLES (OPTIONAL)
+====================================================================
+
+For real API testing, you can set these environment variables:
+
+Windows PowerShell:
+> $env:OPENAI_API_KEY="your-real-openai-key"
+> $env:SUMUP_API_KEY="your-real-sumup-key"
+> $env:API_BASE_URL="http://localhost:8000"
+
+Windows Command Prompt:
+> set OPENAI_API_KEY=your-real-openai-key
+> set SUMUP_API_KEY=your-real-sumup-key
+> set API_BASE_URL=http://localhost:8000
+
+Without these, the app uses test/mock values for local development.
+
+====================================================================
+📱 MOBILE APP TESTING
+====================================================================
+
+For Flutter mobile app testing:
+
+1. Ensure your mobile device/emulator can reach your computer
+2. For Android emulator: Use 10.0.2.2:8000 instead of localhost:8000
+3. For physical device: Use your computer's IP address (e.g., 192.168.1.100:8000)
+4. Update ALLOWED_HOSTS in settings.py if needed
+5. Android network security config already allows localhost connections
+
+FLUTTER CONFIGURATION:
+• The Flutter app is now configured to use localhost:8000 by default
+• For device testing, you may need to temporarily change the API base URL
+• All test files updated to expect localhost URLs
+
+====================================================================
+🐛 TROUBLESHOOTING
+====================================================================
+
+1. SERVER WON'T START:
+   • Check if port 8000 is already in use: netstat -an | findstr :8000
+   • Try: python manage.py runserver localhost:8001
+   • Ensure you're in the project directory
+
+2. DATABASE ERRORS:
+   • Delete exam_prep_db.sqlite3 and run migrations again
+   • Or run: python manage.py migrate --run-syncdb
+
+3. FLUTTER APP CAN'T CONNECT:
+   • Verify server is running on http://localhost:8000
+   • Check if Flutter app is using correct API base URL
+   • For mobile testing, use device IP instead of localhost
+
+4. API NOT RESPONDING:
+   • Run: python test_local_api_endpoints.py to verify all endpoints
+   • Check Django logs in terminal
+   • Ensure CORS settings allow your requests
+   • Verify API base URL in Flutter app
+
+5. PRODUCTION VS LOCAL CONFUSION:
+   • Make sure you're NOT using production_settings.py
+   • Verify Frontend/lib/utils/api_config.dart uses localhost
+   • Check that no hardcoded production URLs remain
+
+====================================================================
+🎯 PRODUCTION vs DEVELOPMENT
+====================================================================
+
+CURRENT (LOCAL DEVELOPMENT):
+• Settings: exam_prep_platform.settings
+• Database: SQLite (exam_prep_db.sqlite3)
+• Debug: True
+• Server: localhost:8000
+• Flutter API Base: localhost:8000
+• Static Files: Development server
+• Email: Console output
+
+FOR PRODUCTION DEPLOYMENT:
+• Settings: exam_prep_platform.production_settings  
+• Database: SQLite
+• Debug: False
+• Server: 188.245.35.46
+• Flutter API Base: 188.245.35.46
+• Static Files: Collected and served by web server
+• Email: SMTP
+
+SWITCHING TO PRODUCTION:
+1. Update Flutter API config to use production server
+2. Use production_settings.py
+3. Deploy to production server
+4. Update environment variables
+
+====================================================================
+✨ WHAT'S NEW
+====================================================================
+
+✅ Case-insensitive email authentication implemented
+✅ Full local development configuration completed
+✅ Flutter app configured for localhost:8000
+✅ Production server (188.245.35.46) disabled for local development
+✅ Comprehensive API testing script added
+✅ Advanced server startup script with checks
+✅ All test files updated for local development
+✅ Android network security allows localhost connections
+
+Your app is ready for local development and testing!
+No more production server dependencies for local development!
+
+==================================================================== 

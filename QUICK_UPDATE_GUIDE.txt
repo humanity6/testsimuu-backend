@@ -1,0 +1,148 @@
+====================================================================
+🚀 TESTIMUS QUICK SERVER UPDATE GUIDE
+====================================================================
+Server: 188.245.35.46
+Last Updated: December 2024
+Status: ✅ READY FOR DEPLOYMENT
+
+====================================================================
+📝 COMPLETED FIXES
+====================================================================
+
+✅ .env file created with proper UTF-8 encoding (no BOM issues)
+✅ production_settings.py updated to use environment variables
+✅ requirements.txt updated with python-dotenv
+✅ update_server.sh script created for easy updates
+✅ Translation issues fixed (ai_assistant_title added to English)
+✅ Environment check scripts created (check_env_variables.py, test_env_only.py)
+✅ File encoding issues resolved (fix_env.py script)
+
+====================================================================
+🔐 IMPORTANT: UPDATE YOUR SECRETS BEFORE DEPLOYMENT
+====================================================================
+
+Before deploying, update these values in your .env file:
+
+1. OPENAI_API_KEY (REQUIRED for ChatBot):
+   - Replace: your_actual_openai_api_key_here
+   - Get from: https://platform.openai.com/api-keys
+   - Format: sk-proj-...
+
+2. EMAIL CONFIGURATION (Required for password reset, notifications):
+   - Replace: your_email@gmail.com
+   - Replace: your_gmail_app_password_here
+   - Get Gmail App Password: https://support.google.com/accounts/answer/185833
+
+3. DATABASE PASSWORD (If using PostgreSQL):
+   - Replace: your_secure_database_password_here
+   - Use a strong password for production
+
+====================================================================
+🚀 DEPLOYMENT STEPS
+====================================================================
+
+1. **Update Secrets in .env file:**
+   - Edit .env file with your actual API keys and passwords
+   - Test locally: python test_env_only.py
+
+2. **Upload to Server:**
+   - Upload entire project to /var/www/testimus/ on your server
+   - Make sure .env file is included
+
+3. **Run Update Script on Server:**
+   ```bash
+   cd /var/www/testimus
+   sudo chmod +x update_server.sh
+   sudo ./update_server.sh
+   ```
+
+4. **Verify Deployment:**
+   ```bash
+   cd /var/www/testimus
+   python check_env_variables.py
+   ```
+
+====================================================================
+🧪 LOCAL TESTING (Before Deployment)
+====================================================================
+
+Test your configuration locally:
+
+1. **Test Environment Variables:**
+   ```bash
+   python test_env_only.py
+   ```
+   Should show: ✅ OpenAI API Key: Configured
+
+2. **Test Django Settings:**
+   ```bash
+   python check_env_variables.py
+   ```
+
+3. **Fix Encoding Issues (if needed):**
+   ```bash
+   python fix_env.py
+   ```
+
+====================================================================
+🔧 TROUBLESHOOTING
+====================================================================
+
+**Problem: ChatBot not working**
+- Solution: Update OPENAI_API_KEY in .env file with valid key
+
+**Problem: .env encoding errors**
+- Solution: Run `python fix_env.py`
+
+**Problem: Translation missing**
+- Solution: Already fixed - ai_assistant_title added to English translations
+
+**Problem: Environment variables not loading**
+- Solution: Ensure .env file is in project root and properly encoded
+
+====================================================================
+📱 MOBILE APP UPDATES
+====================================================================
+
+After server update, you may need to:
+1. Update API endpoints in Flutter app if changed
+2. Test mobile app connectivity to new server
+3. Update any hardcoded URLs in mobile app
+
+====================================================================
+🎯 EXPECTED RESULTS AFTER DEPLOYMENT
+====================================================================
+
+✅ ChatBot should work correctly (with valid OpenAI API key)
+✅ All translations should display properly
+✅ Environment variables loaded from .env file
+✅ Production settings active (DEBUG=False)
+✅ Secure configuration with proper secrets
+
+====================================================================
+📞 SUPPORT
+====================================================================
+
+If you encounter issues:
+1. Check server logs: /var/log/django/testimus.log
+2. Run diagnostic: python check_env_variables.py
+3. Verify .env encoding: python fix_env.py
+
+====================================================================
+2. ENVIRONMENT FILE:
+====================================================================
+
+- Update .env with:
+  - SECRET_KEY (generate new for production)
+  - DEBUG=False
+  - DATABASE_URL (SQLite file path)
+  - EMAIL settings (if using email features)
+  - API keys (OpenAI, SumUp, etc.)
+
+====================================================================
+3. DATABASE SETUP:
+====================================================================
+
+- SQLite database will be created automatically
+- Run migrations: python manage.py migrate
+- Create superuser: python manage.py createsuperuser 

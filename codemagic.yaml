@@ -1,0 +1,228 @@
+workflows:
+  # Main iOS Development Build Workflow
+  ios-development:
+    name: iOS Development Build
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: development # or ad_hoc for wider distribution
+        bundle_identifier: com.example.quizApp
+      vars:
+        BUNDLE_ID: "com.example.quizApp" # <-- Put your bundle id here
+        XCODE_WORKSPACE: "Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    triggering:
+      events:
+        - push
+        - tag
+        - pull_request
+      branch_patterns:
+        - pattern: develop
+          include: true
+          source: true
+        - pattern: main
+          include: true
+          source: true
+        - pattern: feature/*
+          include: true
+          source: true
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/Frontend/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          cd Frontend
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          cd Frontend/ios
+          pod install
+      - name: Flutter analyze
+        script: |
+          cd Frontend
+          flutter analyze
+      - name: Flutter unit tests
+        script: |
+          cd Frontend
+          flutter test
+        ignore_failure: true
+      - name: Build ipa for development
+        script: |
+          cd Frontend
+          flutter build ipa --release \
+            --build-name=1.0.0 \
+            --build-number=$(($(date +'%Y%m%d%H%M%S')))
+    artifacts:
+      - Frontend/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - Frontend/flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - user@example.com # <-- Put your email here
+        notify:
+          success: true
+          failure: true
+
+  # Ad-hoc distribution for wider testing (when ready)
+  ios-adhoc:
+    name: iOS Ad-hoc Distribution
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: ad_hoc # Allows distribution to up to 100 devices
+        bundle_identifier: com.example.quizApp
+      vars:
+        BUNDLE_ID: "com.example.quizApp"
+        XCODE_WORKSPACE: "Runner.xcworkspace"
+        XCODE_SCHEME: "Runner"
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/Frontend/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          cd Frontend
+          flutter packages pub get
+      - name: Install pods
+        script: |
+          cd Frontend/ios
+          pod install
+      - name: Flutter analyze
+        script: |
+          cd Frontend
+          flutter analyze
+      - name: Flutter unit tests
+        script: |
+          cd Frontend
+          flutter test
+        ignore_failure: true
+      - name: Build ipa for ad-hoc distribution
+        script: |
+          cd Frontend
+          flutter build ipa --release \
+            --build-name=1.0.0 \
+            --build-number=$(($(date +'%Y%m%d%H%M%S')))
+    artifacts:
+      - Frontend/build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+      - Frontend/flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - user@example.com # <-- Put your email here
+        notify:
+          success: true
+          failure: true
+
+  # Workflow for testing only (no build)
+  ios-test:
+    name: iOS Test Workflow
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      flutter: stable
+      xcode: latest
+    triggering:
+      events:
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+          include: true
+          source: true
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          cd Frontend
+          flutter packages pub get
+      - name: Flutter analyze
+        script: |
+          cd Frontend
+          flutter analyze
+      - name: Flutter unit tests
+        script: |
+          cd Frontend
+          flutter test
+      - name: Flutter integration tests
+        script: |
+          cd Frontend
+          flutter test integration_test/
+        ignore_failure: true
+    publishing:
+      email:
+        recipients:
+          - user@example.com # <-- Put your email here
+        notify:
+          success: false
+          failure: true
+
+# Future App Store workflow (uncomment when ready to publish to App Store)
+# ios-appstore:
+#   name: iOS App Store Workflow
+#   max_build_duration: 120
+#   instance_type: mac_mini_m1
+#   integrations:
+#     app_store_connect: codemagic
+#   environment:
+#     ios_signing:
+#       distribution_type: app_store
+#       bundle_identifier: com.example.quizApp
+#     vars:
+#       APP_ID: 1234567890 # <-- Put your App Store Connect app id here
+#       BUNDLE_ID: "com.example.quizApp"
+#       XCODE_WORKSPACE: "Runner.xcworkspace"
+#       XCODE_SCHEME: "Runner"
+#     flutter: stable
+#     xcode: latest
+#     cocoapods: default
+#   scripts:
+#     - name: Set up local.properties
+#       script: |
+#         echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/Frontend/android/local.properties"
+#     - name: Get Flutter packages
+#       script: |
+#         cd Frontend
+#         flutter packages pub get
+#     - name: Install pods
+#       script: |
+#         cd Frontend/ios
+#         pod install
+#     - name: Flutter analyze
+#       script: |
+#         cd Frontend
+#         flutter analyze
+#     - name: Flutter unit tests
+#       script: |
+#         cd Frontend
+#         flutter test
+#       ignore_failure: true
+#     - name: Build ipa for distribution
+#       script: |
+#         cd Frontend
+#         flutter build ipa --release \
+#           --build-name=1.0.0 \
+#           --build-number=$(($(date +'%Y%m%d%H%M%S')))
+#   artifacts:
+#     - Frontend/build/ios/ipa/*.ipa
+#     - /tmp/xcodebuild_logs/*.log
+#     - Frontend/flutter_drive.log
+#   publishing:
+#     email:
+#       recipients:
+#         - user@example.com
+#       notify:
+#         success: true
+#         failure: true
+#     app_store_connect:
+#       auth: integration
+#       submit_to_testflight: true
+#       submit_to_app_store: false 
